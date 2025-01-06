@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: ExpressContainer
+    environment:
+      POSTGRES_USER: postgres  # Set the default postgres user
+      POSTGRES_PASSWORD: expresspassdb  # Set the password for the postgres user
+      POSTGRES_DB: expressdb  # Database to create
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
