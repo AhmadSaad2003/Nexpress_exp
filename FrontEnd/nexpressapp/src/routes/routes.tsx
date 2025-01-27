@@ -48,4 +48,10 @@ export const ROUTES = {
   DELETEBIEN: `${API_URL}/bienSupports/:IdBien`,
   UPDATEBIEN: `${API_URL}/bienSupports/:IdBien`,
 
+  //sources routes
+  GETAPPSOURCE: `${API_URL}/sourceRisques/appSources/:IdApp`,
+  CREATESOURCE: `${API_URL}/sourceRisques/`,
+  DELETESOURCE: `${API_URL}/sourceRisques/:sourceId`,
+  UPDATESOURCE: `${API_URL}/sourceRisques/:sourceId`,
+
 };

@@ -6,23 +6,36 @@ import { BienSupport } from "../../interfaces/biensupport";
 import { EvenementRedoute } from "../../interfaces/evenementRedoute";
 import { SocleDeSecurite } from "../../interfaces/socleDeSecurite";
 import { Ecart } from "../../interfaces/ecart";
-
+//mission
 import { getappmissions } from "../../services/Atelier1Services/getAppMissionsService";
 import { createmission } from "../../services/Atelier1Services/createMissionService";
 import { updatemission } from "../../services/Atelier1Services/updateMissionService"; // Add update service
 import { deletemission } from "../../services/Atelier1Services/deleteMissionService"; // Add delete service
+//valeur metier
 import { getmissionvaleurmetier } from "../../services/Atelier1Services/getValeurMetierService";
 import { addValeurMetier } from "../../services/Atelier1Services/createValeurMetierService";
 import { deletevaleurmetier } from "../../services/Atelier1Services/deleteValeurMetierService";
 import { updateValeurMetier } from "../../services/Atelier1Services/updateValeurMetierService";
+//socle de securite
 import { getappsocle } from "../../services/Atelier1Services/getAppSocleService";
 import { createsocle } from "../../services/Atelier1Services/createSocleSecService";
 import { updatesocle } from "../../services/Atelier1Services/updateSocleSecService";
 import { deletesocle } from "../../services/Atelier1Services/deleteSocleSecService";
+//ecarts
 import { getsocleecart } from "../../services/Atelier1Services/getSocleEcartService";
 import { updateecart } from "../../services/Atelier1Services/updateEcartService";
 import { deleteecart } from "../../services/Atelier1Services/deleteEcartService";
 import { createecart } from "../../services/Atelier1Services/createEcartService";
+//evenements redoute
+import { getvaleurevent } from "../../services/Atelier1Services/getValeurEventsService";
+import { updateevent } from "../../services/Atelier1Services/updateEventService";
+import { deleteevent } from "../../services/Atelier1Services/deleteEventService";
+import { createevent } from "../../services/Atelier1Services/createEventService";
+//bien support
+import { getvaleurbien } from "../../services/Atelier1Services/getValeurBienService";
+import { updatebien } from "../../services/Atelier1Services/updateBienService";
+import { deletebien } from "../../services/Atelier1Services/deleteBienService";
+import { createbien } from "../../services/Atelier1Services/createBienService";
 
 const Atelier1: React.FC = () => {
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -42,16 +55,21 @@ const Atelier1: React.FC = () => {
     useState<SocleDeSecurite | null>(null);
     const [selectedEcart, setSelectedEcart] =
     useState<Ecart | null>(null);
-  const [showViewValeurModal, setShowViewValeurModal] =
-    useState<boolean>(false);
+    const [selectedEvent, setselectedEvent] =
+    useState<EvenementRedoute | null>(null);
+    const [selectedBien, setselectedBien] =
+    useState<BienSupport | null>(null);
+    const [showBienEvent, setshowBienEvent] = useState(false);
 
-  //states for mission
+  //=====================================================mission usestates=======================================
   const [isAddMissionModalOpen, setAddMissionModalOpen] = useState(false);
   const [newMissionDescription, setNewMissionDescription] = useState("");
   const [isUpdateMissionModalOpen, setUpdateMissionModalOpen] = useState(false); // Update modal state
   const [updatedMissionDescription, setUpdatedMissionDescription] =
     useState(""); // Updated description
   const [isDeleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false); // Delete confirmation modal
+
+  //==============================================valeur metier usestates=======================================
   const [isAddValeurMetierModalOpen, setAddValeurMetierModalOpen] =
     useState(false);
   const [newValeurMetierName, setNewValeurMetierName] = useState("");
@@ -64,12 +82,18 @@ const Atelier1: React.FC = () => {
   const [isDeleteValeurConfirmationOpen, setDeleteValeurConfirmationOpen] =
     useState(false); // Delete confirmation modal
   const [isUpdateValeurModalOpen, setUpdateValeurModalOpen] = useState(false); // Update modal state
+  const [showViewValeurModal, setShowViewValeurModal] =
+  useState<boolean>(false);
+  
+  //==============================================Socle de securite usestates=======================================
   const [isAddSocleModalOpen, setAddSocleModalOpen] = useState(false);
   const [newSocleName, setnewSocleName] = useState("");
   const [isUpdateSocleModalOpen, setUpdateSocleModalOpen] = useState(false); // Update modal state
   const [isDeleteSocleConfirmationOpen, setDeleteSocleConfirmationOpen] =
     useState(false); // Delete confirmation modal
 
+
+  //==============================================Ecart usestates===============================================
   const [isAddEcartModalOpen, setAddEcartModalOpen] =
     useState(false);
   const [newEcartType, setNewEcartType] = useState("");
@@ -80,6 +104,29 @@ const Atelier1: React.FC = () => {
     useState<boolean>(false);
   const [isUpdateEcartModalOpen, setUpdateEcartModalOpen] = useState(false); // Update modal state
 
+  //==============================================Evenement redoute usestates=======================================
+  const [isAddEventModalOpen, setAddEventModalOpen] =
+    useState(false);
+  const [newEventName, setNewEventName] = useState("");
+  const [newEventDescription, setNewEventDescription] =
+    useState("");
+  const [newEventType, setNewEventType] = useState("");
+  const [newEventConsequence, setNewEventConsequence] = useState("");
+  const [isDeleteEventConfirmationOpen, setDeleteEventConfirmationOpen] =
+    useState(false); // Delete confirmation modal
+  const [isUpdateEventModalOpen, setUpdateEventModalOpen] = useState(false); // Update modal state
+  const [showViewEventModal, setShowViewEventModal] =
+  useState<boolean>(false);
+
+  //==============================================Bien usestates=======================================
+  const [isAddBienModalOpen, setAddBienModalOpen] =
+    useState(false);
+  const [newBienName, setNewBienName] = useState("");
+  const [isDeleteBienConfirmationOpen, setDeleteBienConfirmationOpen] =
+    useState(false); // Delete confirmation modal
+  const [isUpdateBienModalOpen, setUpdateBienModalOpen] = useState(false); // Update modal state
+
+  //===========================================================================================================
   const navigate = useNavigate();
   const location = useLocation();
   const app = location.state?.app;
@@ -120,18 +167,31 @@ const Atelier1: React.FC = () => {
     }
   };
 
-  const handleSelectValeurMetier = (valeurMetier: ValeurMetier) => {
+  const handleSelectValeurMetier = async (valeurMetier: ValeurMetier) => {
     if(selectedValeurMetier!= null && selectedValeurMetier.id == valeurMetier.id){
       setSelectedValeurMetier(null);
     }else{
-      setSelectedValeurMetier(valeurMetier);
+      try {
+        setshowBienEvent(true);
+        setSelectedValeurMetier(valeurMetier);
+        setselectedBien(null);
+        setselectedEvent(null);
+        const bienResponse = await getvaleurbien(valeurMetier.id);
+        setBienSupports(bienResponse);
+        const eventResponse = await getvaleurevent(valeurMetier.id);
+        setEvenementsRedoutes(eventResponse);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
   };
 
   const handleSelectSocleDeSecurite = async (socle: SocleDeSecurite) => {
     if(selectedSocleDeSecurite != null && selectedSocleDeSecurite.id==socle.id){
       setSelectedSocleDeSecurite(null);
+      setshowBienEvent(false);
     }else{
+      setshowBienEvent(false);
       setSelectedMission(null);
       setSelectedEcart(null);
       setSelectedSocleDeSecurite(socle);
@@ -150,6 +210,24 @@ const Atelier1: React.FC = () => {
       setSelectedEcart(null);
     }else{
       setSelectedEcart(ecart);
+    }
+  };
+
+  const handleSelectedBien = (bien: BienSupport) => {
+    if(selectedBien != null && selectedBien.id==bien.id)
+    {
+      setselectedBien(null);
+    }else{
+      setselectedBien(bien);
+    }
+  };
+
+  const handleSelectedEvent = (event: EvenementRedoute) => {
+    if(selectedEvent != null && selectedEvent.id==event.id)
+    {
+      setselectedEvent(null);
+    }else{
+      setselectedEvent(event);
     }
   };
 
@@ -594,13 +672,232 @@ const Atelier1: React.FC = () => {
     }
   };
 
-  //===============================================================================================================
+  //==============================================Bien support==================================================
 
-  const handleAddBienSupport = () => {
-    if (selectedValeurMetier) {
-      navigate(`/add-biensupport/${selectedValeurMetier.id}`);
+  const handleAddBienClick = () => {
+    setNewBienName("");
+    setAddBienModalOpen(true);
+  };
+
+  const handleCloseAddBienModal = () => {
+    setAddBienModalOpen(false);
+    setNewBienName("");
+  };
+
+  const handleCreateBien = async () => {
+    if (!newBienName.trim() || !selectedValeurMetier) {
+      alert("Please enter a valid Bien support name.");
+      return;
+    }
+
+    try {
+      const response = await createbien(newBienName, selectedValeurMetier.id);
+
+      if (response && response.status >= 200 && response.status < 300) {
+        alert("Bien support created successfully!");
+        if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
+        handleCloseAddBienModal();
+      } else {
+        alert("Failed to create Bien support. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating Bien support:", error);
+      alert("Failed to create Bien support.");
     }
   };
+
+  const handleUpdateBienClick = () => {
+    if (!selectedBien) {
+      alert("please select a Bien support");
+    } else {
+      setNewBienName(selectedBien.Name || "");
+      setUpdateBienModalOpen(true);
+    }
+  };
+
+  const handleUpdateBien = async () => {
+    if (!newBienName.trim() || !selectedBien) {
+      alert("Please enter a valid Bien support name.");
+      return;
+    }
+
+    try {
+      const response = await updatebien(
+        newBienName,
+        selectedBien.id,
+      );
+      if (response && response.status >= 200 && response.status < 300) {
+        alert("Bien support updated successfully!");
+        if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
+        setUpdateBienModalOpen(false);
+      } else {
+        alert("Failed to update Bien support. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error updating Bien support:", error);
+      alert("Failed to update Bien support.");
+    }
+  };
+
+  // Delete Socle de securite
+  const handleDeleteBienClick = () => {
+    if (!selectedBien) {
+      alert("please select a Bien support");
+    } else {
+      setDeleteBienConfirmationOpen(true);
+    }
+  };
+
+  const handleDeleteBien = async () => {
+    if (selectedBien) {
+      try {
+        const response = await deletebien(selectedBien.id);
+        if (response && response.status >= 200 && response.status < 300) {
+          alert("Bien support deleted successfully!");
+          if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
+          setDeleteBienConfirmationOpen(false);
+        } else {
+          alert("Failed to delete Bien support. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error deleting Bien support:", error);
+        alert("Failed to delete Bien support.");
+      }
+    }
+  };
+
+  const handleCloseDeleteBienConfirmation = () => {
+    setDeleteBienConfirmationOpen(false);
+  };
+  //==============================================Evenement redoute functions========================================
+
+  const handleOpenAddEventModal = () => {
+    setAddEventModalOpen(true);
+  };
+
+  const handleCloseAddEventModal = () => {
+    setAddEventModalOpen(false);
+    setNewEventName("");
+    setNewEventDescription("");
+    setNewEventType("");
+    setNewEventConsequence("");
+  };
+
+  const handleCreateEvent = async () => {
+    if (
+      !newEventName.trim() ||
+      !newEventDescription.trim() ||
+      !newEventType.trim() ||
+      !newEventConsequence.trim() ||
+      !selectedValeurMetier
+    ) {
+      alert("Please fill all the fields.");
+      return;
+    }
+
+    try {
+      const response = await createevent(
+        newEventName,
+        newEventDescription,
+        newEventType,
+        newEventConsequence,
+        selectedValeurMetier.id
+      );
+
+      if (response && response.status >= 200 && response.status < 300) {
+        if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
+        alert("Evenement redoute created successfully!");
+        handleCloseAddEventModal();
+      } else {
+        alert("Failed to create Evenement redoute. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error creating Evenement redoute:", error);
+      alert("Failed to create Evenement redoute.");
+    }
+  };
+
+  const handleViewEvent = () => {
+    if (selectedEvent) {
+      setShowViewEventModal(true); // Show the view modal
+    } else {
+      alert("Please select an Evenement redoute to view.");
+    }
+  };
+
+  const handleCloseViewEventModal = () => {
+    setShowViewEventModal(false); // Reset all states when closing the modal
+  };
+
+  const handleOpenDeleteEventModal = () => {
+    setDeleteEventConfirmationOpen(true);
+  };
+
+  const handleDeleteEvent = async () => {
+    if (selectedEvent) {
+      try {
+        const response = await deleteevent(selectedEvent.id);
+        if (response && response.status >= 200 && response.status < 300) {
+          if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
+          alert("Evenement redoute deleted successfully!");
+          setDeleteEventConfirmationOpen(false);
+        } else {
+          alert("Failed to delete Evenement redoute. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error deleting Evenement redoute:", error);
+        alert("Failed to delete Evenement redoute.");
+      }
+    }
+  };
+
+  const handleCloseDeleteEventConfirmation = () => {
+    setDeleteEventConfirmationOpen(false);
+  };
+
+  const handleOpenUpdateEventModal = () => {
+    if (selectedEvent) {
+      setNewEventName(selectedEvent.Name);
+      setNewEventDescription(selectedEvent.Description);
+      setNewEventType(selectedEvent.TypeEvent);
+      setNewEventConsequence(selectedEvent.Consequence);
+      setUpdateEventModalOpen(true);
+    }
+  };
+
+  const handleCloseUpdateEventModal = () => {
+    setUpdateEventModalOpen(false);
+    setNewEventName("");
+    setNewEventDescription("");
+    setNewEventType("");
+    setNewEventConsequence("");
+  };
+
+  const handleUpdateEvent = async () => {
+    if (selectedEvent) {
+      try {
+        const response = await updateevent(
+          newEventName,
+          newEventDescription,
+          newEventType,
+          newEventConsequence,
+          selectedEvent.id
+        );
+
+        if (response && response.status >= 200 && response.status < 300) {
+          if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
+          alert("Evenement redoute created successfully!");
+          handleCloseUpdateEventModal();
+        } else {
+          alert("Failed to create Evenement redoute. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error creating Evenement redoute:", error);
+        alert("Failed to create Evenement redoute.");
+      }
+    }
+  };
+
 
   const handleAddEvenementRedoute = () => {
     if (selectedValeurMetier) {
@@ -842,32 +1139,67 @@ const Atelier1: React.FC = () => {
           </div>
         )}
 
-        {selectedValeurMetier && (
+        {selectedValeurMetier && showBienEvent && (
           <div>
             <h3>Bien Supports and Evenements Redoutes for Valeur Metier</h3>
             <h4>Bien Supports</h4>
-            {bienSupports
-              .filter((bien) => bien.IdValeurMetier === selectedValeurMetier.id)
-              .map((bien) => (
-                <div key={bien.id}>{bien.Name}</div>
+            {bienSupports.map((bien) => (
+                <div 
+                key={bien.id}
+                onClick={() => handleSelectedBien(bien)}
+                style={{
+                  cursor: "pointer",
+                  marginBottom: "10px",
+                  backgroundColor:
+                    selectedBien &&
+                    selectedBien.id === bien.id
+                      ? "#e0f7fa"
+                      : "#f9f9f9", // Highlight selected app
+                }}
+                >{bien.Name}</div>
               ))}
+            <button onClick={handleAddBienClick}>
+              Add Bien support
+            </button>
+            <button onClick={handleUpdateBienClick}>
+              Update Bien support
+            </button>
+            <button onClick={handleDeleteBienClick}>
+              Delete Bien support
+            </button>
             <h4>Evenements Redoutes</h4>
-            {evenementsRedoutes
-              .filter(
-                (event) => event.IdValeurMetier === selectedValeurMetier.id
-              )
-              .map((event) => (
-                <div key={event.id}>{event.Name}</div>
+            {evenementsRedoutes.map((event) => (
+                <div 
+                key={event.id}
+                onClick={() => handleSelectedEvent(event)}
+                style={{
+                  cursor: "pointer",
+                  marginBottom: "10px",
+                  backgroundColor:
+                    selectedEvent &&
+                    selectedEvent.id === event.id
+                      ? "#e0f7fa"
+                      : "#f9f9f9", // Highlight selected app
+                }}
+                >{event.Name}</div>
               ))}
-            <button onClick={handleAddBienSupport}>Add Bien Support</button>
-            <button onClick={handleAddEvenementRedoute}>
-              Add Evenement Redoute
+            <button onClick={() => handleViewEvent()}>
+              View Evenement redoute
+            </button>
+            <button onClick={handleOpenAddEventModal}>
+              Add Evenement redoute
+            </button>
+            <button onClick={handleOpenUpdateEventModal}>
+              Update Evenement redoute
+            </button>
+            <button onClick={handleOpenDeleteEventModal}>
+              Delete Evenement redoute
             </button>
           </div>
         )}
       </div>
 
-      {/* mission modals*/}
+      {/*======================================== mission modals ============================================*/}
       {isAddMissionModalOpen && (
         <div
           className="modal-overlay"
@@ -1025,7 +1357,7 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/*Valeur metier Modals*/}
+      {/*======================================== valeur metier modals ============================================*/}
       {isAddValeurMetierModalOpen && (
         <div
           className="modal-overlay"
@@ -1315,7 +1647,7 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* socle de securite modals*/}
+      {/*======================================== socle de securite modals ============================================*/}
       {isAddSocleModalOpen && (
         <div
           className="modal-overlay"
@@ -1473,7 +1805,7 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/*Ecart Modals*/}
+      {/*======================================== ecarts modals ============================================*/}
       {isAddEcartModalOpen && (
         <div
           className="modal-overlay"
@@ -1690,6 +2022,444 @@ const Atelier1: React.FC = () => {
               </button>
               <button
                 onClick={handleCloseUpdateEcartModal}
+                style={{ padding: "10px 20px" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/*======================================== bien modals ============================================*/}
+
+      {isAddBienModalOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h3>Add Bien support</h3>
+            <input
+              type="text"
+              placeholder="Bien support name"
+              value={newBienName}
+              onChange={(e) => setNewBienName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={handleCreateBien}
+                style={{ padding: "10px 20px" }}
+              >
+                Create
+              </button>
+              <button
+                onClick={handleCloseAddBienModal}
+                style={{ padding: "10px 20px" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Update socle de securite  Modal */}
+      {isUpdateBienModalOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h3>Update Bien support</h3>
+            <input
+              type="text"
+              value={newBienName}
+              onChange={(e) => setNewBienName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={handleUpdateBien}
+                style={{ padding: "10px 20px" }}
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setUpdateBienModalOpen(false)}
+                style={{ padding: "10px 20px" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete socle de securite  Modal */}
+      {isDeleteBienConfirmationOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h3>Are you sure you want to delete this bien  support?</h3>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={handleDeleteBien}
+                style={{ padding: "10px 20px" }}
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleCloseDeleteBienConfirmation}
+                style={{ padding: "10px 20px" }}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/*======================================== evenement redoute modals ============================================*/}
+      {isAddEventModalOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h3>Add Evenement redoute</h3>
+            <input
+              type="text"
+              placeholder="Name"
+              value={newEventName}
+              onChange={(e) => setNewEventName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <textarea
+              placeholder="Description"
+              value={newEventDescription}
+              onChange={(e) => setNewEventDescription(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Type"
+              value={newEventType}
+              onChange={(e) => setNewEventType(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Consequence"
+              value={newEventConsequence}
+              onChange={(e) => setNewEventConsequence(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={handleCreateEvent}
+                style={{ padding: "10px 20px" }}
+              >
+                Save
+              </button>
+              <button
+                onClick={handleCloseAddEventModal}
+                style={{ padding: "10px 20px" }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* View Modal */}
+      {showViewEventModal && selectedEvent && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              textAlign: "center",
+            }}
+          >
+            <h3>Valeur metier Details</h3>
+            <p>
+              <strong>Name:</strong> {selectedEvent.Name}
+            </p>
+            <p>
+              <strong>Description:</strong> {selectedEvent.Description}
+            </p>
+            <p>
+              <strong>Type:</strong> {selectedEvent.TypeEvent}
+            </p>
+            <p>
+              <strong>Consequence</strong>{" "}
+              {selectedEvent.Consequence}
+            </p>
+            <button
+              onClick={handleCloseViewEventModal}
+              style={{
+                marginTop: "20px",
+                padding: "10px",
+                backgroundColor: "#2196f3",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Back
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteEventConfirmationOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h3>Are you sure you want to delete this Evenement redoute?</h3>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={handleDeleteEvent}
+                style={{ padding: "10px 20px" }}
+              >
+                Yes
+              </button>
+              <button
+                onClick={handleCloseDeleteEventConfirmation}
+                style={{ padding: "10px 20px" }}
+              >
+                No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isUpdateEventModalOpen && (
+        <div
+          className="modal-overlay"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            className="modal-content"
+            style={{
+              background: "#fff",
+              padding: "20px",
+              borderRadius: "5px",
+              width: "400px",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+            }}
+          >
+            <h3>Update Evenement redoute</h3>
+            <input
+              type="text"
+              value={newEventName}
+              onChange={(e) => setNewEventName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <textarea
+              value={newEventDescription}
+              onChange={(e) => setNewEventDescription(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <input
+              type="text"
+              value={newEventType}
+              onChange={(e) => setNewEventType(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <input
+              type="text"
+              value={newEventConsequence}
+              onChange={(e) => setNewEventConsequence(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                marginBottom: "10px",
+                boxSizing: "border-box",
+              }}
+            />
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <button
+                onClick={handleUpdateEvent}
+                style={{ padding: "10px 20px" }}
+              >
+                Save
+              </button>
+              <button
+                onClick={handleCloseUpdateEventModal}
                 style={{ padding: "10px 20px" }}
               >
                 Cancel

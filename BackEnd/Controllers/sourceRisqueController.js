@@ -41,13 +41,13 @@ const getSourceRisqueById = async (req, res) => {
 // Mettre à jour une source de risque
 const updateSourceRisque = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { Name, IdApp } = req.body;
-        const sourceRisque = await SourceRisque.findByPk(id);
+        const { sourceId } = req.params;
+        const { Name } = req.body;
+        const sourceRisque = await SourceRisque.findByPk(sourceId);
         if (!sourceRisque) {
             return res.status(404).json({ error: 'Source de risque non trouvée.' });
         }
-        await sourceRisque.update({ Name, IdApp });
+        await sourceRisque.update({ Name });
         res.status(200).json(sourceRisque);
     } catch (error) {
         console.error(error);
@@ -58,8 +58,8 @@ const updateSourceRisque = async (req, res) => {
 // Supprimer une source de risque
 const deleteSourceRisque = async (req, res) => {
     try {
-        const { id } = req.params;
-        const sourceRisque = await SourceRisque.findByPk(id);
+        const { sourceId } = req.params;
+        const sourceRisque = await SourceRisque.findByPk(sourceId);
         if (!sourceRisque) {
             return res.status(404).json({ error: 'Source de risque non trouvée.' });
         }
@@ -71,4 +71,14 @@ const deleteSourceRisque = async (req, res) => {
     }
 };
 
-module.exports = { createSourceRisque, getAllSourceRisque, getSourceRisqueById, updateSourceRisque, deleteSourceRisque };
+const getAppSource = async (req, res) => {
+    try {
+      const {IdApp} = req.params; 
+      const sourceRisque = await SourceRisque.findAll({ where: { IdApp } });
+      res.status(200).json(sourceRisque);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching Sources risques", error });
+    }
+};
+
+module.exports = { createSourceRisque, getAllSourceRisque, getSourceRisqueById, updateSourceRisque, deleteSourceRisque, getAppSource };
