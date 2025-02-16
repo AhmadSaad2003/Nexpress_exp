@@ -64,7 +64,7 @@ const getPartiePrenantById = async (req, res) => {
 // Mettre à jour une PartiePrenant
 const updatePartiePrenant = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { partieId } = req.params;
         const { Nom, Activite, Depandance, Penetration, Maturite, Confiance, IdEcosysteme } = req.body;
 
         // Vérifier si Ecosysteme existe
@@ -73,7 +73,7 @@ const updatePartiePrenant = async (req, res) => {
             return res.status(404).json({ error: 'Ecosysteme non trouvé.' });
         }
 
-        const partiePrenant = await PartiePrenant.findByPk(id);
+        const partiePrenant = await PartiePrenant.findByPk(partieId);
         if (!partiePrenant) {
             return res.status(404).json({ error: 'Partie prenante non trouvée.' });
         }
@@ -96,8 +96,8 @@ const updatePartiePrenant = async (req, res) => {
 // Supprimer une PartiePrenant
 const deletePartiePrenant = async (req, res) => {
     try {
-        const { id } = req.params;
-        const partiePrenant = await PartiePrenant.findByPk(id);
+        const { partieId } = req.params;
+        const partiePrenant = await PartiePrenant.findByPk(partieId);
         if (!partiePrenant) {
             return res.status(404).json({ error: 'Partie prenante non trouvée.' });
         }
@@ -109,4 +109,14 @@ const deletePartiePrenant = async (req, res) => {
     }
 };
 
-module.exports = { createPartiePrenant, getAllPartiesPrenantes, getPartiePrenantById, updatePartiePrenant, deletePartiePrenant };
+const getEcoParties = async (req, res) => {
+    try {
+      const {IdEcosysteme} = req.params; 
+      const parties = await PartiePrenant.findAll({ where: { IdEcosysteme } });
+      res.status(200).json(parties);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching parties prenants", error });
+    }
+};
+
+module.exports = { createPartiePrenant, getAllPartiesPrenantes, getPartiePrenantById, updatePartiePrenant, deletePartiePrenant, getEcoParties };

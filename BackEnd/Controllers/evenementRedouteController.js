@@ -73,7 +73,7 @@ const deleteEvenementRedoute = async (req, res) => {
 
 const getValeurEvents = async (req, res) => {
     try {
-      const {IdValeurMetier} = req.params; 
+      const {IdValeurMetier} = req.params;
       const events = await EvenementRedoute.findAll({ where: { IdValeurMetier } });
       res.status(200).json(events);
     } catch (error) {

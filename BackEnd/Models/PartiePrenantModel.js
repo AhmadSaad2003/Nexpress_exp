@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // Connexion à la base de données
-const Ecosysteme = require('./EcosystemeModel'); // Modèle Ecosysteme
+const Ecosysteme = require('./ecosystemeModel'); // Modèle Ecosysteme
 //const CheminStrategique = require('./CheminStrategiqueModel'); // Modèle CheminStrategique
 
 class PartiePrenant extends Model {}

@@ -52,22 +52,16 @@ const getMesureSecuriteById = async (req, res) => {
 // Mettre à jour une MesureSecurite
 const updateMesureSecurite = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { IdCheminStrategique, Mesure, MenaceResiduel } = req.body;
+        const { mesureId } = req.params;
+        const { Mesure, MenaceResiduel } = req.body;
 
-        // Vérifier l'existence du CheminStrategique
-        const cheminStrategique = await CheminStrategique.findByPk(IdCheminStrategique);
-        if (!cheminStrategique) {
-            return res.status(404).json({ error: 'Chemin stratégique non trouvé.' });
-        }
-
-        const mesureSecurite = await MesureSecurite.findByPk(id);
+        const mesureSecurite = await MesureSecurite.findByPk(mesureId);
         if (!mesureSecurite) {
             return res.status(404).json({ error: 'Mesure de sécurité non trouvée.' });
         }
 
         await mesureSecurite.update({
-            IdCheminStrategique, Mesure, MenaceResiduel
+            Mesure, MenaceResiduel
         });
 
         res.status(200).json(mesureSecurite);
@@ -80,8 +74,8 @@ const updateMesureSecurite = async (req, res) => {
 // Supprimer une MesureSecurite
 const deleteMesureSecurite = async (req, res) => {
     try {
-        const { id } = req.params;
-        const mesureSecurite = await MesureSecurite.findByPk(id);
+        const { mesureId } = req.params;
+        const mesureSecurite = await MesureSecurite.findByPk(mesureId);
         if (!mesureSecurite) {
             return res.status(404).json({ error: 'Mesure de sécurité non trouvée.' });
         }
@@ -93,4 +87,14 @@ const deleteMesureSecurite = async (req, res) => {
     }
 };
 
-module.exports = { createMesureSecurite, getAllMesuresSecurite, getMesureSecuriteById, updateMesureSecurite, deleteMesureSecurite };
+const getScenarioMesure = async (req, res) => {
+    try {
+      const {IdCheminStrategique} = req.params; 
+      const mesures = await MesureSecurite.findAll({ where: { IdCheminStrategique } });
+      res.status(200).json(mesures);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching mesures de securite", error });
+    }
+};
+
+module.exports = { createMesureSecurite, getAllMesuresSecurite, getMesureSecuriteById, updateMesureSecurite, deleteMesureSecurite, getScenarioMesure };

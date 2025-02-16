@@ -4,10 +4,14 @@ const {
     getAllEcosystemes,
     getEcosystemeById,
     updateEcosysteme,
-    deleteEcosysteme
+    deleteEcosysteme,
+    getAppEcosystemes
 } = require('../Controllers/ecosystemeController');
 
 const router = express.Router();
+
+//other route
+router.get('/appEcosystems/:IdApp', getAppEcosystemes);
 
 // Routes CRUD pour le modèle Ecosysteme
 router.post('/', createEcosysteme);           // Créer un nouvel écosystème

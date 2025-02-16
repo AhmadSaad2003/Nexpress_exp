@@ -1,5 +1,5 @@
 const PACS = require('../Models/PACSModel'); // Importer le modèle PACS
-const App = require('../Models/appModel'); // Importer le modèle App
+const App = require('../Models/AppModel'); // Importer le modèle App
 
 // Créer un nouveau PACS
 const createPACS = async (req, res) => {
@@ -52,16 +52,11 @@ const getPACSById = async (req, res) => {
 // Mettre à jour un PACS
 const updatePACS = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { Nom, Type, Impact, CoefficientRisques, IdApp } = req.body;
+        const { pacsId } = req.params;
+        const { Nom, Type, Impact, CoefficientRisques } = req.body;
 
-        // Vérifier l'existence de l'App
-        const app = await App.findByPk(IdApp);
-        if (!app) {
-            return res.status(404).json({ error: 'App non trouvée.' });
-        }
 
-        const pacs = await PACS.findByPk(id);
+        const pacs = await PACS.findByPk(pacsId);
         if (!pacs) {
             return res.status(404).json({ error: 'PACS non trouvé.' });
         }
@@ -80,8 +75,8 @@ const updatePACS = async (req, res) => {
 // Supprimer un PACS
 const deletePACS = async (req, res) => {
     try {
-        const { id } = req.params;
-        const pacs = await PACS.findByPk(id);
+        const { pacsId } = req.params;
+        const pacs = await PACS.findByPk(pacsId);
         if (!pacs) {
             return res.status(404).json({ error: 'PACS non trouvé.' });
         }
@@ -93,4 +88,14 @@ const deletePACS = async (req, res) => {
     }
 };
 
-module.exports = { createPACS, getAllPACS, getPACSById, updatePACS, deletePACS };
+const getAppPacs = async (req, res) => {
+    try {
+      const {IdApp} = req.params; 
+      const pacs = await PACS.findAll({ where: { IdApp } });
+      res.status(200).json(pacs);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching Pacs", error });
+    }
+};
+
+module.exports = { createPACS, getAllPACS, getPACSById, updatePACS, deletePACS, getAppPacs };

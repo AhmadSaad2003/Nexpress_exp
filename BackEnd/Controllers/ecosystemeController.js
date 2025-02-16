@@ -71,4 +71,14 @@ const deleteEcosysteme = async (req, res) => {
     }
 };
 
-module.exports = { createEcosysteme, getAllEcosystemes, getEcosystemeById, updateEcosysteme, deleteEcosysteme };
+const getAppEcosystemes = async (req, res) => {
+    try {
+      const {IdApp} = req.params; 
+      const ecosystemes = await Ecosysteme.findAll({ where: { IdApp } });
+      res.status(200).json(ecosystemes);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching Sources risques", error });
+    }
+};
+
+module.exports = { createEcosysteme, getAllEcosystemes, getEcosystemeById, updateEcosysteme, deleteEcosysteme, getAppEcosystemes };

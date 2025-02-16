@@ -52,22 +52,16 @@ const getScenarioOperationnelById = async (req, res) => {
 // Mettre à jour un ScenarioOperationnel
 const updateScenarioOperationnel = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { Intitul, IdCheminStrategique, Connaitre, Rentrer, Trouver, Exploiter, Vraisemblence } = req.body;
+        const { oppId } = req.params;
+        const { Intitul, Connaitre, Rentrer, Trouver, Exploiter, Vraisemblence } = req.body;
 
-        // Vérifier l'existence du CheminStrategique
-        const cheminStrategique = await CheminStrategique.findByPk(IdCheminStrategique);
-        if (!cheminStrategique) {
-            return res.status(404).json({ error: 'Chemin stratégique non trouvé.' });
-        }
-
-        const scenarioOperationnel = await ScenarioOperationnel.findByPk(id);
+        const scenarioOperationnel = await ScenarioOperationnel.findByPk(oppId);
         if (!scenarioOperationnel) {
             return res.status(404).json({ error: 'Scénario opérationnel non trouvé.' });
         }
 
         await scenarioOperationnel.update({
-            Intitul, IdCheminStrategique, Connaitre, Rentrer, Trouver, Exploiter, Vraisemblence
+            Intitul, Connaitre, Rentrer, Trouver, Exploiter, Vraisemblence
         });
 
         res.status(200).json(scenarioOperationnel);
@@ -80,8 +74,8 @@ const updateScenarioOperationnel = async (req, res) => {
 // Supprimer un ScenarioOperationnel
 const deleteScenarioOperationnel = async (req, res) => {
     try {
-        const { id } = req.params;
-        const scenarioOperationnel = await ScenarioOperationnel.findByPk(id);
+        const { oppId } = req.params;
+        const scenarioOperationnel = await ScenarioOperationnel.findByPk(oppId);
         if (!scenarioOperationnel) {
             return res.status(404).json({ error: 'Scénario opérationnel non trouvé.' });
         }
@@ -93,4 +87,14 @@ const deleteScenarioOperationnel = async (req, res) => {
     }
 };
 
-module.exports = { createScenarioOperationnel, getAllScenarioOperationnels, getScenarioOperationnelById, updateScenarioOperationnel, deleteScenarioOperationnel };
+const getScenarioOpp = async (req, res) => {
+    try {
+      const {IdCheminStrategique} = req.params; 
+      const scenariosOpp = await ScenarioOperationnel.findAll({ where: { IdCheminStrategique } });
+      res.status(200).json(scenariosOpp);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching Scenarios opperationnel", error });
+    }
+};
+
+module.exports = { createScenarioOperationnel, getAllScenarioOperationnels, getScenarioOperationnelById, updateScenarioOperationnel, deleteScenarioOperationnel, getScenarioOpp };

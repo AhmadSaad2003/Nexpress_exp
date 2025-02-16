@@ -1,14 +1,14 @@
 import axios from "axios";
 import { ROUTES } from "../../routes/routes";
 
-export const getvaleurevent = async (IdValeurMetier:number) => {
+export const getapppacs = async (IdApp:number) => {
     try {
         const token = localStorage.getItem("token");
+    
         const headers = {
           Authorization: `Bearer ${token}`,
         };
-        
-        const url = ROUTES.GETVALEUREVENT.replace(":IdValeurMetier", IdValeurMetier.toString());
+        const url = ROUTES.GETAPPPACS.replace(":IdApp", IdApp.toString());
         const response = await axios.get(
             url,
             {

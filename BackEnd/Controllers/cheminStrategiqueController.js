@@ -66,14 +66,9 @@ const getCheminStrategiqueById = async (req, res) => {
 // Mettre à jour un CheminStrategique
 const updateCheminStrategique = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { Intitul, Description, IdSourceRisque, IdEvenementRedoute, IdPartiePrenant, Gravite } = req.body;
+        const { stratId } = req.params;
+        const { Intitul, Description, IdEvenementRedoute, IdPartiePrenant, Gravite } = req.body;
 
-        // Vérifier l'existence de la SourceRisque
-        const sourceRisque = await SourceRisque.findByPk(IdSourceRisque);
-        if (!sourceRisque) {
-            return res.status(404).json({ error: 'Source de risque non trouvée.' });
-        }
 
         // Vérifier l'existence de l'EvenementRedoute
         const evenementRedoute = await EvenementRedoute.findByPk(IdEvenementRedoute);
@@ -87,13 +82,13 @@ const updateCheminStrategique = async (req, res) => {
             return res.status(404).json({ error: 'Partie prenante non trouvée.' });
         }
 
-        const cheminStrategique = await CheminStrategique.findByPk(id);
+        const cheminStrategique = await CheminStrategique.findByPk(stratId);
         if (!cheminStrategique) {
             return res.status(404).json({ error: 'Chemin stratégique non trouvé.' });
         }
 
         await cheminStrategique.update({
-            Intitul, Description, IdSourceRisque, IdEvenementRedoute, IdPartiePrenant, Gravite
+            Intitul, Description, IdEvenementRedoute, IdPartiePrenant, Gravite
         });
 
         res.status(200).json(cheminStrategique);
@@ -106,8 +101,8 @@ const updateCheminStrategique = async (req, res) => {
 // Supprimer un CheminStrategique
 const deleteCheminStrategique = async (req, res) => {
     try {
-        const { id } = req.params;
-        const cheminStrategique = await CheminStrategique.findByPk(id);
+        const { stratId } = req.params;
+        const cheminStrategique = await CheminStrategique.findByPk(stratId);
         if (!cheminStrategique) {
             return res.status(404).json({ error: 'Chemin stratégique non trouvé.' });
         }
@@ -119,4 +114,15 @@ const deleteCheminStrategique = async (req, res) => {
     }
 };
 
-module.exports = { createCheminStrategique, getAllCheminsStrategiques, getCheminStrategiqueById, updateCheminStrategique, deleteCheminStrategique };
+const getSourceStrat = async (req, res) => {
+    try {
+      const {IdSourceRisque} = req.params; 
+      const scenarioStrat = await CheminStrategique.findAll({ where: { IdSourceRisque } });
+      res.status(200).json(scenarioStrat);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching scenario strategique", error });
+    }
+};
+
+
+module.exports = { createCheminStrategique, getAllCheminsStrategiques, getCheminStrategiqueById, updateCheminStrategique, deleteCheminStrategique, getSourceStrat };

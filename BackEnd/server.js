@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use('/api/user', userRoute);
+app.use('/api/auth/user', userRoute);
 app.use('/api/apps', appRoute);
 app.use('/api/missions', missionRoute);
 app.use('/api/valeurMetiers', valeurMetier);
