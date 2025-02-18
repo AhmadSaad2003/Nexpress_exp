@@ -11,7 +11,7 @@ import {getscenarioopp} from "../../services/Atelier4Services/getScenarioOppServ
 import {getappsource} from "../../services/Atelier2Services/getAppSourceService";
 import {getsourcestrat} from "../../services/Atelier3Services/getSourceScenarioStratService";
 
-const Atelier2: React.FC = () => {
+const Atelier4: React.FC = () => {
     
     
     const [sourceRisques, setSourceRisques] = useState<SourceRisque[]>([]);
@@ -640,4 +640,4 @@ const Atelier2: React.FC = () => {
     );
 };
 
-export default Atelier2;
+export default Atelier4;

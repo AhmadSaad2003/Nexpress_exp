@@ -37,7 +37,7 @@ import { getvaleurevent } from "../../services/Atelier1Services/getValeurEventsS
 //valeur metier
 import { getmissionvaleurmetier } from "../../services/Atelier1Services/getValeurMetierService"
 
-const Atelier1: React.FC = () => {
+const Atelier3: React.FC = () => {
   const [ecosystemes, setEcosystemes] = useState<Ecosysteme[]>([]);
   const [partiePrenants, setPartiePrenants] = useState<PartiePrenant[]>([]);
   const [strategiques, setStrategiques] = useState<CheminStrategique[]>([]);
@@ -2061,4 +2061,4 @@ const Atelier1: React.FC = () => {
   );
 };
 
-export default Atelier1;
+export default Atelier3;

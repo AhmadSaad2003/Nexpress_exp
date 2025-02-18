@@ -1,28 +1,40 @@
 import axios from "axios";
 import { ROUTES } from "../../routes/routes";
 
-export const createpacs = async (Nom:string, Type:string, Impact:number, CoefficientRisques:number,IdApp:number) => {
-    const token = localStorage.getItem("token");
+export const createpacs = async (
+  MesureDeSecurite: string,
+  Responsable: string,
+  DifficulteDeMisEnOeuvre: string,
+  Complexite: number,
+  DureeEcheance: number,
+  Status: string,
+  IdApp: number
+) => {
+  const token = localStorage.getItem("token");
 
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   try {
-    const response = await axios.post(ROUTES.CREATEPACS, {
-        Nom,
-        Type,
-        Impact,
-        CoefficientRisques,
-        IdApp
-    },
-    {
-        headers,
-    });
-    
+    const response = await axios.post(
+      ROUTES.CREATEPACS,
+      {
+        MesureDeSecurite,
+        Responsable,
+        DifficulteDeMisEnOeuvre,
+        Complexite,
+        DureeEcheance,
+        Status,
+        IdApp,
+      },
+      { headers }
+    );
+
     if (response.status >= 200 && response.status < 300) {
-        return response;  // You can return the full response if you need additional data
+      return response; // Return full response if needed
     } else {
-        throw new Error('Failed to create scenario opperationnel');
+      throw new Error("Failed to create PACS");
     }
   } catch (error) {
     if (axios.isAxiosError(error)) {

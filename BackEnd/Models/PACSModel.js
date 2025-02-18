@@ -10,29 +10,36 @@ PACS.init({
         autoIncrement: true,
         primaryKey: true
     },
-    Nom: {
+    MesureDeSecurite: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+    Responsable: {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    Type: {
-        type: DataTypes.STRING(50),
+    DifficulteDeMisEnOeuvre: {
+        type: DataTypes.TEXT,
         allowNull: false
     },
-    Impact: {
-        type: DataTypes.FLOAT,
+    Complexite: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    CoefficientRisques: {
-        type: DataTypes.FLOAT,
+    DureeEcheance: {
+        type: DataTypes.INTEGER,
         allowNull: false
     },
-    // Ajout de la clé étrangère IdApp
+    Status: {
+        type: DataTypes.ENUM('termine', 'a lancer', 'en cours'),
+        allowNull: false
+    },
     IdApp: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: App, // Référence au modèle App
-            key: 'id'  // Clé primaire de App
+            model: App, 
+            key: 'id'
         }
     }
 }, {

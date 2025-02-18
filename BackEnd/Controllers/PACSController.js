@@ -4,7 +4,7 @@ const App = require('../Models/AppModel'); // Importer le modèle App
 // Créer un nouveau PACS
 const createPACS = async (req, res) => {
     try {
-        const { Nom, Type, Impact, CoefficientRisques, IdApp } = req.body;
+        const { MesureDeSecurite, Responsable, DifficulteDeMisEnOeuvre, Complexite,DureeEcheance, Status, IdApp } = req.body;
 
         // Vérifier l'existence de l'App
         const app = await App.findByPk(IdApp);
@@ -13,7 +13,7 @@ const createPACS = async (req, res) => {
         }
 
         const newPACS = await PACS.create({
-            Nom, Type, Impact, CoefficientRisques, IdApp
+            MesureDeSecurite, Responsable, DifficulteDeMisEnOeuvre, Complexite,DureeEcheance, Status, IdApp
         });
 
         res.status(201).json(newPACS);
@@ -53,8 +53,7 @@ const getPACSById = async (req, res) => {
 const updatePACS = async (req, res) => {
     try {
         const { pacsId } = req.params;
-        const { Nom, Type, Impact, CoefficientRisques } = req.body;
-
+        const { MesureDeSecurite, Responsable, DifficulteDeMisEnOeuvre, Complexite, DureeEcheance, Status } = req.body;
 
         const pacs = await PACS.findByPk(pacsId);
         if (!pacs) {
@@ -62,7 +61,7 @@ const updatePACS = async (req, res) => {
         }
 
         await pacs.update({
-            Nom, Type, Impact, CoefficientRisques, IdApp
+            MesureDeSecurite, Responsable, DifficulteDeMisEnOeuvre, Complexite,DureeEcheance, Status
         });
 
         res.status(200).json(pacs);
