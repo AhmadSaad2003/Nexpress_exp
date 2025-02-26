@@ -6,7 +6,7 @@ body {
   }
   
   .guide-wrapper {
-    max-width: 900px;
+    max-width: 100%;
     margin: 20px auto;
     padding: 20px;
     background: linear-gradient(135deg, #ffffff, #e3f2fd);
