@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../../services/logInServices/signInService";
-
+import "../../Style/SignIn.css";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -27,9 +27,9 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="sign-in">
+    <div className="auth-signin">
       <h2>Sign In</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="auth-error">{error}</p>}
       <form onSubmit={handleSignIn}>
         <input
           type="email"

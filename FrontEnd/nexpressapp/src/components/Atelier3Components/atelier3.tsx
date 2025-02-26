@@ -8,6 +8,7 @@ import { SourceRisque } from "../../interfaces/sourceRisque";
 import { EvenementRedoute } from "../../interfaces/evenementRedoute";
 import { Mission } from "../../interfaces/mission";
 import { ValeurMetier } from "../../interfaces/valeurMetier"
+import "../../Style/atelier3.css"
 //ecosysteme
 import { getappecosys } from "../../services/Atelier3Services/getAppEcosystemeService";
 import { createecosys } from "../../services/Atelier3Services/createEcosystemService";
@@ -764,281 +765,186 @@ const Atelier3: React.FC = () => {
 
   //==========================================================================================================
   return (
-    <div className="atelier1-page" style={{ display: "flex", height: "100vh" }}>
-      <div
-        className="menu"
-        style={{
-          width: "20%",
-          borderRight: "1px solid #ccc",
-          padding: "10px",
-          boxSizing: "border-box",
-        }}
-      >
-        <h3>{app.name}</h3>
-        <p>
-          <strong>Created On:</strong>{" "}
-          {new Date(app.dateofcreation).toLocaleDateString()}
-        </p>
-
-        <h4>Ecosystemes</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+    <div className="atelier3-page">
+      <div className="atelier3-page__sidebar">
+        <h4 className="atelier3-page__sidebar-title">Ecosystemes</h4>
+        <ul className="atelier3-page__ecosysteme-list">
           {ecosystemes.length > 0 ? (
             ecosystemes.map((ecosysteme) => (
               <li
                 key={ecosysteme.id}
+                className={`atelier3-page__ecosysteme-item ${
+                  selectedEcosystemes && selectedEcosystemes.id === ecosysteme.id
+                    ? "atelier3-page__ecosysteme-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectEcosysteme(ecosysteme)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedEcosystemes && selectedEcosystemes.id === ecosysteme.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
               >
                 {ecosysteme.Description || `Ecosysteme ${ecosysteme.id}`}
               </li>
             ))
           ) : (
-            <p>No ecosystemes available.</p>
+            <p className="atelier3-page__empty-message">No ecosystemes available.</p>
           )}
         </ul>
         {/* Buttons for updating or deleting */}
-        <div>
+        <div className="atelier3-page__ecosysteme-actions">
           <button
-            onClick={handleAddEcosystemeClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#2196f3",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
+            className="atelier3-page__btn atelier3-page__btn--add"
+            onClick={handleAddEcosystemeClick}>
             Add Ecosysteme
           </button>
           <button
-            onClick={handleUpdateEcosystemeClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#ffc107",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
+            className="atelier3-page__btn atelier3-page__btn--update"
+            onClick={handleUpdateEcosystemeClick}>
             Update
           </button>
           <button
-            onClick={handleDeleteEcosystemeClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#f44336",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
+            className="atelier3-page__btn atelier3-page__btn--delete"
+            onClick={handleDeleteEcosystemeClick}>
             Delete
           </button>
         </div>
 
-        <h4>Source de risque</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <h4 className="atelier3-page__sidebar-title">Source de risque</h4>
+        <ul className="atelier3-page__source-list">
           {sourceRisques.length > 0 ? (
             sourceRisques.map((source) => (
               <li
                 key={source.id}
+                className={`atelier3-page__source-item ${
+                  selectedSourceRisque && selectedSourceRisque.id === source.id
+                    ? "atelier3-page__source-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectSource(source)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedSourceRisque &&
-                    selectedSourceRisque.id === source.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
               >
                 {source.Name || `Socle ${source.id}`}
               </li>
             ))
           ) : (
-            <p>No Source de risque available.</p>
+            <p className="atelier3-page__empty-message">No Source de risque available.</p>
           )}
         </ul>
       </div>
 
-      <div
-        className="content"
-        style={{
-          flex: 1,
-          padding: "20px",
-          boxSizing: "border-box",
-          overflowY: "auto",
-        }}
-      >
+      <div className="atelier3-page__content">
         {selectedEcosystemes && !selectedSourceRisque && (
-          <div>
-            <h3>Ecosysteme: {selectedEcosystemes.Description}</h3>
-
-            <h3>Parties prenantes</h3>
+          <div className="atelier3-page__ecosysteme-content">
+            <h3>Parties prenantes for : {selectedEcosystemes.Description}</h3>
             {partiePrenants.map((partie) => (
               <div
-                key={partie.id}
-                onClick={() => handleSelectPartie(partie)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedPartiePrenant &&
-                    selectedPartiePrenant.id === partie.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-              >
+              key={partie.id}
+              className={`atelier3-page__partie-item ${
+                selectedPartiePrenant && selectedPartiePrenant.id === partie.id
+                  ? "atelier3-page__partie-item--selected"
+                  : ""
+              }`}
+              onClick={() => handleSelectPartie(partie)}
+            >
                 <p>{partie.Nom}</p>
               </div>
             ))}
-
-            <button onClick={() => handleViewPartie()}>
+            <div className="atelier3-page__partie-actions">
+            <button className="atelier3-page__btn" onClick={() => handleViewPartie()}>
               View Partie prenante
             </button>
-            <button onClick={handleOpenAddPartieModal}>
+            <button className="atelier3-page__btn" onClick={handleOpenAddPartieModal}>
               Add Partie prenante
             </button>
-            <button onClick={handleOpenUpdatePartieModal}>
+            <button className="atelier3-page__btn" onClick={handleOpenUpdatePartieModal}>
               Update Partie prenante
             </button>
-            <button onClick={handleOpenDeletePartieModal}>
+            <button className="atelier3-page__btn" onClick={handleOpenDeletePartieModal}>
               Delete Partie prenante
             </button>
+            </div>
           </div>
         )}
 
         {selectedSourceRisque && !selectedEcosystemes && (
-          <div>
-            <h3>Source de risque: {selectedSourceRisque.Name}</h3>
-            <h4>Scenarios strategiques</h4>
+          <div className="atelier3-page__source-content">
+            <h3>Scenarios strategiques for : {selectedSourceRisque.Name}</h3>
             {strategiques.map((strat) => (
-              <div 
+              <div
               key={strat.id}
+              className={`atelier3-page__strat-item ${
+                selectedStrategique && selectedStrategique.id === strat.id
+                  ? "atelier3-page__strat-item--selected"
+                  : ""
+              }`}
               onClick={() => handleSelectStrategique(strat)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedStrategique &&
-                    selectedStrategique.id === strat.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-              >{strat.Intitul}</div>
+            >
+                {strat.Intitul}
+                </div>
             ))}
-
-            <button onClick={() => handleViewScenario()}>
+            <div className="atelier3-page__strat-actions">
+              <button className="atelier3-page__btn" onClick={() => handleViewScenario()}>
               View Scenario Strategique
             </button>
-            <button onClick={handleAddScenarioClick}>
+            <button className="atelier3-page__btn" onClick={handleAddScenarioClick}>
               Add Scenario strategique
             </button>
-            <button onClick={handleUpdateScenarioClick}>
+            <button className="atelier3-page__btn"onClick={handleUpdateScenarioClick}>
               Update Scenario strategique
             </button>
-            <button onClick={handleDeleteScenarioClick}>
+            <button className="atelier3-page__btn" onClick={handleDeleteScenarioClick}>
               Delete Scenario strategique
             </button>
+            </div>
+            
           </div>
         )}
 
         {selectedStrategique && showBienEvent && (
-          <div>
-            <h3>Mesures de securites for Scenarios strategiques</h3>
-            <h4>Mesures Securites</h4>
+          <div className="atelier3-page__strat-detail">
+            <h3>Mesures de securites for : {selectedStrategique.Intitul}</h3>
             {mesureSecurites.map((mesure) => (
-                <div 
+                <div
                 key={mesure.id}
+                className={`atelier3-page__mesure-item ${
+                  selectedMesureSecurite && selectedMesureSecurite.id === mesure.id
+                    ? "atelier3-page__mesure-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectedMesure(mesure)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedMesureSecurite &&
-                    selectedMesureSecurite.id === mesure.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-                >{mesure.Mesure}</div>
+              >{mesure.Mesure}</div>
               ))}
-            <button onClick={handleViewMesure}>
+              <div className="atelier3-page__mesure-actions">
+            <button className="atelier3-page__btn" onClick={handleViewMesure}>
               View Mesure de securite
             </button> 
-            <button onClick={handleOpenAddMesureModal}>
+            <button className="atelier3-page__btn" onClick={handleOpenAddMesureModal}>
               Add Mesure de securite
             </button>
-            <button onClick={handleOpenUpdateMesureModal}>
+            <button className="atelier3-page__btn" onClick={handleOpenUpdateMesureModal}>
               Update Mesure de securite
             </button>
-            <button onClick={handleOpenDeleteMesureModal}>
+            <button className="atelier3-page__btn" onClick={handleOpenDeleteMesureModal}>
               Delete Mesure de securite
             </button>
+            </div>
           </div>
         )}
       </div>
 
       {/*======================================== ecosysteme modals ============================================*/}
       {isAddEcosystemeModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Add Ecosysteme</h3>
             <input
+              className="atelier3-page__modal-input"
               type="text"
               placeholder="Ecosysteme description"
               value={newEcosystemeDescription}
               onChange={(e) => setNewEcosystemeDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateEcosysteme}
-                style={{ padding: "10px 20px" }}
-              >
+              />
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleCreateEcosysteme}>
                 Create
               </button>
-              <button
-                onClick={handleCloseModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseModal}>
                 Cancel
               </button>
             </div>
@@ -1048,53 +954,20 @@ const Atelier3: React.FC = () => {
 
       {/* Update Mission Modal */}
       {isUpdateEcosystemeModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Update Ecosysteme</h3>
             <input
+              className="atelier3-page__modal-input"
               type="text"
               value={newEcosystemeDescription}
               onChange={(e) => setNewEcosystemeDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateEcosysteme}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleUpdateEcosysteme}>
                 Save
               </button>
-              <button
-                onClick={() => setUpdateEcosystemeModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={() => setUpdateEcosystemeModalOpen(false)}>
                 Cancel
               </button>
             </div>
@@ -1104,42 +977,14 @@ const Atelier3: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {isDeleteConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Are you sure you want to delete this exosysteme?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteEcosysteme}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleDeleteEcosysteme}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseDeleteConfirmation}>
                 No
               </button>
             </div>
@@ -1149,54 +994,22 @@ const Atelier3: React.FC = () => {
 
       {/*======================================== partie prenants modals ============================================*/}
       {isAddPartieModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Add Partie prenants</h3>
             <input
               type="text"
               placeholder="Name"
               value={newPartieNom}
               onChange={(e) => setNewPartieNom(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
+              className="atelier3-page__modal-input"
+              />
             <input
               type="text"
               placeholder="Activite"
               value={newPartieActivite}
               onChange={(e) => setNewPartieActivite(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1205,12 +1018,7 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartieDepandance(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1219,12 +1027,7 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartiePenetration(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1233,12 +1036,7 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartieMaturite(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1247,24 +1045,13 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartieConfiance(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreatePartie}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleCreatePartie}>
                 Save
               </button>
-              <button
-                onClick={handleCloseAddPartieModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseAddPartieModal}>
                 Cancel
               </button>
             </div>
@@ -1274,28 +1061,8 @@ const Atelier3: React.FC = () => {
 
       {/* View Modal */}
       {showViewPartieModal && selectedPartiePrenant && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Partie prenante Details</h3>
             <p>
               <strong>Nom:</strong> {selectedPartiePrenant.Nom}
@@ -1318,17 +1085,7 @@ const Atelier3: React.FC = () => {
             <p>
               <strong>Niveau de menace:</strong> {selectedPartiePrenant.NiveauMenace}
             </p>
-            <button
-              onClick={handleCloseViewPartieModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="atelier3-page__modal-btn" onClick={handleCloseViewPartieModal}>
               Back
             </button>
           </div>
@@ -1337,42 +1094,14 @@ const Atelier3: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {isDeletePartieConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Are you sure you want to delete this Partie prenante?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeletePartie}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleDeletePartie}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeletePartieConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseDeletePartieConfirmation}>
                 No
               </button>
             </div>
@@ -1381,54 +1110,22 @@ const Atelier3: React.FC = () => {
       )}
 
       {isUpdatePartieModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Update Partie prenante</h3>
             <input
               type="text"
               placeholder="Name"
               value={newPartieNom}
               onChange={(e) => setNewPartieNom(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="text"
               placeholder="Activite"
               value={newPartieActivite}
               onChange={(e) => setNewPartieActivite(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1437,12 +1134,7 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartieDepandance(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1451,12 +1143,7 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartiePenetration(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1465,12 +1152,7 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartieMaturite(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
@@ -1479,24 +1161,13 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setNewPartieConfiance(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdatePartie}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleUpdatePartie}>
                 Save
               </button>
-              <button
-                onClick={handleCloseUpdatePartieModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseUpdatePartieModal}>
                 Cancel
               </button>
             </div>
@@ -1506,65 +1177,28 @@ const Atelier3: React.FC = () => {
 
       {/*======================================== scenario strategique modals ============================================*/}
       {isAddScenarioModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Add Scenario strategique</h3>
             <input
               type="text"
               placeholder="Intitule"
               value={newScenarioIntitul}
               onChange={(e) => setnewScenarioIntitul(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <textarea
               placeholder="Description"
               value={newScenarioDescription}
               onChange={(e) => setnewScenarioDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <select
               value={newScenarioIdEvenementRedoute}
               onChange={(e) =>setnewScenarioIdEvenementRedoute(Number(e.target.value))}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             >
-              <option value="">Select an option</option> {/* Placeholder option */}
+              <option value="">Select an Evenement redoute</option> {/* Placeholder option */}
               {evenements.map((evenement) => (
               <option key={evenement.id} value={evenement.id}>
                 {evenement.Name}
@@ -1574,14 +1208,9 @@ const Atelier3: React.FC = () => {
             <select
               value={newScenarioIdPartiePrenant}
               onChange={(e) =>setnewScenarioIdPartiePrenant(Number(e.target.value))}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             >
-              <option value="">Select an option</option> {/* Placeholder option */}
+              <option value="">Select an Partie prenante</option> {/* Placeholder option */}
               {parties.map((partie) => (
               <option key={partie.id} value={partie.id}>
                 {partie.Nom}
@@ -1595,24 +1224,13 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setnewScenarioGravite(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateScenario}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleCreateScenario}>
                 Create
               </button>
-              <button
-                onClick={handleCloseAddScenarioModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseAddScenarioModal}>
                 Cancel
               </button>
             </div>
@@ -1622,65 +1240,28 @@ const Atelier3: React.FC = () => {
 
       {/* Update socle de securite  Modal */}
       {isUpdateScenarioModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Update Scenario strategique</h3>
             <input
               type="text"
               placeholder="Intitule"
               value={newScenarioIntitul}
               onChange={(e) => setnewScenarioIntitul(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <textarea
               placeholder="Description"
               value={newScenarioDescription}
               onChange={(e) => setnewScenarioDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <select
               value={newScenarioIdEvenementRedoute}
               onChange={(e) =>setnewScenarioIdEvenementRedoute(Number(e.target.value))}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             >
-              <option value="">Select an option</option> {/* Placeholder option */}
+              <option value="">Select an Evenement redoute</option> {/* Placeholder option */}
               {evenements.map((evenement) => (
               <option key={evenement.id} value={evenement.id}>
                 {evenement.Name}
@@ -1690,14 +1271,9 @@ const Atelier3: React.FC = () => {
             <select
               value={newScenarioIdPartiePrenant}
               onChange={(e) =>setnewScenarioIdPartiePrenant(Number(e.target.value))}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             >
-              <option value="">Select an option</option> {/* Placeholder option */}
+              <option value="">Select an Partie prenante</option> {/* Placeholder option */}
               {partiePrenants.map((partie) => (
               <option key={partie.id} value={partie.id}>
                 {partie.Nom}
@@ -1711,24 +1287,13 @@ const Atelier3: React.FC = () => {
               onChange={(e) => setnewScenarioGravite(Number(e.target.value))}
               min={1}
               max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateScenario}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleUpdateScenario}>
                 Save
               </button>
-              <button
-                onClick={() => setUpdateScenarioModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={() => setUpdateScenarioModalOpen(false)}>
                 Cancel
               </button>
             </div>
@@ -1738,42 +1303,14 @@ const Atelier3: React.FC = () => {
 
       {/* Delete socle de securite  Modal */}
       {isDeleteScenarioConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Are you sure you want to delete this Scenario strategique?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteScenario}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleDeleteScenario}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteScenarioConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseDeleteScenarioConfirmation}>
                 No
               </button>
             </div>
@@ -1782,28 +1319,8 @@ const Atelier3: React.FC = () => {
       )}
 
         {showViewScenarioModal && selectedStrategique && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Scenario strategique Details</h3>
             <p>
               <strong>Intitule:</strong> {selectedStrategique.Intitul}
@@ -1814,17 +1331,7 @@ const Atelier3: React.FC = () => {
             <p>
               <strong>Gravite:</strong> {selectedStrategique.Gravite}
             </p>
-            <button
-              onClick={handleCloseViewScenarioModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="atelier3-page__modal-btn" onClick={handleCloseViewScenarioModal}>
               Back
             </button>
           </div>
@@ -1833,65 +1340,27 @@ const Atelier3: React.FC = () => {
 
       {/*======================================== mesure modals ============================================*/}
       {isAddMesureModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Add Mesure</h3>
             <textarea
               placeholder="Mesure"
               value={newMesureMesure}
               onChange={(e) => setNewMesureMesure(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <input
               type="number"
               placeholder="Menace residuel"
               value={newMesureMenaceResiduel}
               onChange={(e) => setNewMesureMenaceResiduel(Number(e.target.value))}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateMesure}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleCreateMesure}>
                 Save
               </button>
-              <button
-                onClick={handleCloseAddMesureModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseAddMesureModal}>
                 Cancel
               </button>
             </div>
@@ -1901,28 +1370,8 @@ const Atelier3: React.FC = () => {
 
       {/* View Modal */}
       {showViewMesureModal && selectedMesureSecurite && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Mesure de securite Details</h3>
             <p>
               <strong>Mesure:</strong> {selectedMesureSecurite.Mesure}
@@ -1930,17 +1379,7 @@ const Atelier3: React.FC = () => {
             <p>
               <strong>Menace residuel:</strong> {selectedMesureSecurite.MenaceResiduel}
             </p>
-            <button
-              onClick={handleCloseViewMesureModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="atelier3-page__modal-btn" onClick={handleCloseViewMesureModal}>
               Back
             </button>
           </div>
@@ -1949,42 +1388,14 @@ const Atelier3: React.FC = () => {
 
       {/* Delete Confirmation Modal */}
       {isDeleteMesureConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Are you sure you want to delete this Mesure de securite?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteMesure}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleDeleteMesure}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteMesureConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseDeleteMesureConfirmation}>
                 No
               </button>
             </div>
@@ -1993,63 +1404,25 @@ const Atelier3: React.FC = () => {
       )}
 
       {isUpdateMesureModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier3-page__modal-overlay">
+          <div className="atelier3-page__modal-content">
             <h3>Update Mesure</h3>
             <input
               type="text"
               value={newMesureMesure}
               onChange={(e) => setNewMesureMesure(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
             <textarea
               value={newMesureMenaceResiduel}
               onChange={(e) => setNewMesureMenaceResiduel(Number(e.target.value))}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier3-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateMesure}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier3-page__modal-actions">
+              <button className="atelier3-page__modal-btn" onClick={handleUpdateMesure}>
                 Save
               </button>
-              <button
-                onClick={handleCloseUpdateMesureModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier3-page__modal-btn" onClick={handleCloseUpdateMesureModal}>
                 Cancel
               </button>
             </div>

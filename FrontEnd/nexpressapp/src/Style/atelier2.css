@@ -1,0 +1,162 @@
+/* Atelier2Page.css */
+
+.atelier2-page {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: #fff;
+  }
+  
+  /* Header / Title Section (if needed) */
+  .atelier2-page h3,
+  .atelier2-page h4 {
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  
+  /* Source List Styling */
+  .atelier2-page__source-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  .atelier2-page__source-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .atelier2-page__source-item:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+  }
+  
+  .atelier2-page__source-item--selected {
+    background-color: #e0f7fa;
+  }
+  
+  /* Action Buttons for Sources */
+  .atelier2-page__source-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 20px;
+    width: 50%;
+    padding-left: 25%;
+  }
+  
+  .atelier2-page__btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: background-color 0.3s ease;
+    background-color: #2196f3;
+    color: #fff;
+  }
+  
+  .atelier2-page__btn--add {
+    background-color: #2196f3;
+    color: #fff;
+  }
+  
+  .atelier2-page__btn--add:hover {
+    background-color: #1976d2;
+  }
+  
+  .atelier2-page__btn--update {
+    background-color: #ffc107;
+    color: #fff;
+  }
+  
+  .atelier2-page__btn--update:hover {
+    background-color: #ffb300;
+  }
+  
+  .atelier2-page__btn--delete {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  .atelier2-page__btn--delete:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Content Section Styling (e.g. detail panels) */
+  .atelier2-page__content-section {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  /* Modal Overlay & Content */
+  .atelier2-page__modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  
+  .atelier2-page__modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    width: 400px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .atelier2-page__modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  .atelier2-page__modal-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .atelier2-page__modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2196f3;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .atelier2-page__modal-btn:hover {
+    background-color: #1976d2;
+    transform: scale(1.02);
+  }
+  

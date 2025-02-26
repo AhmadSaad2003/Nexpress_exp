@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ScenarioOperationnel } from "../../interfaces/cheminoperationnel";
 import {CheminStrategique} from "../../interfaces/cheminStrategique";
-import {SourceRisque} from "../../interfaces/sourceRisque"
+import {SourceRisque} from "../../interfaces/sourceRisque";
+import "../../Style/atelier4.css";
 
 import {createscenarioopp} from "../../services/Atelier4Services/createScenarioOppService";
 import {updatescenarioopp} from "../../services/Atelier4Services/updateScenarioOppService";
@@ -215,429 +216,274 @@ const Atelier4: React.FC = () => {
       };
 
 
-    return (
-        <div className="atelier2-page" style={{ display: "flex", height: "100vh" }}>
-      <div
-        className="menu"
-        style={{
-          padding: "10px",
-          boxSizing: "border-box",
-        }}
-      >
-        <h3>{app.name}</h3>
-        <p>
-          <strong>Created On:</strong>{" "}
-          {new Date(app.dateofcreation).toLocaleDateString()}
-        </p>
+      return (
+        <div className="atelier4-page">    
+          <section className="atelier4-page__content">
+            <div className="atelier4-page__section">
+              <h3>Scénarios Stratégiques</h3>
+              <ul className="atelier4-page__list">
+                {scenarioStrat.length > 0 ? (
+                  scenarioStrat.map((scenario) => (
+                    <li
+                      key={scenario.id}
+                      className={`atelier4-page__list-item ${
+                        selectedScenarioStrat && selectedScenarioStrat.id === scenario.id
+                          ? "atelier4-page__list-item--selected"
+                          : ""
+                      }`}
+                      onClick={() => handleSelectedScenarioStrat(scenario)}
+                    >
+                      {scenario.Intitul || `Scenario ${scenario.id}`}
+                    </li>
+                  ))
+                ) : (
+                  <p className="atelier4-page__empty-message">
+                    No scenario stratégique available.
+                  </p>
+                )}
+              </ul>
+            </div>
+    
+            {selectedScenarioStrat && (
+              <div className="atelier4-page__section">
+                <h3>Operational Scenarios for {selectedScenarioStrat.Intitul}</h3>
+                {scenarioOpp.map((scenario) => (
+                  <div
+                    key={scenario.id}
+                    className={`atelier4-page__list-item ${
+                      selectedScenario && selectedScenario.id === scenario.id
+                        ? "atelier4-page__list-item--selected"
+                        : ""
+                    }`}
+                    onClick={() => handleSelectedScenario(scenario)}
+                  >
+                    {scenario.Intitul}
+                  </div>
+                ))}
+    
+                <div className="atelier4-page__btn-group">
+                  <button
+                    className="atelier4-page__btn atelier4-page__btn--primary"
+                    onClick={handleViewScenario}
+                  >
+                    View Scenario
+                  </button>
+                  <button
+                    className="atelier4-page__btn atelier4-page__btn--add"
+                    onClick={handleAddScenarioClick}
+                  >
+                    Add Scenario
+                  </button>
+                  <button
+                    className="atelier4-page__btn atelier4-page__btn--secondary"
+                    onClick={handleUpdateScenarioClick}
+                  >
+                    Update Scenario
+                  </button>
+                  <button
+                    className="atelier4-page__btn atelier4-page__btn--danger"
+                    onClick={handleDeleteScenarioClick}
+                  >
+                    Delete Scenario
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
 
-        <h4>Scenarios strategique</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {scenarioStrat.length > 0 ? (
-            scenarioStrat.map((scenario) => (
-              <li
-                key={scenario.id}
-                onClick={() => handleSelectedScenarioStrat(scenario)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedScenarioStrat && selectedScenarioStrat.id === scenario.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-              >
-                {scenario.Intitul || `ScenarioStrat ${scenario.id}`}
-              </li>
-            ))
-          ) : (
-            <p>No scenario strategique available.</p>
+          
+          {/*===========================================scenario opperationnel modals================================================*/}
+
+          {/* Add Scenario Modal */}
+          {isAddScenarioModalOpen && (
+            <div className="atelier4-page__modal-overlay">
+              <div className="atelier4-page__modal-content">
+                <h3>Add Scenario</h3>
+                <input
+                  type="text"
+                  placeholder="Intitulé"
+                  value={newScenarioIntitule}
+                  onChange={(e) => setNewScenarioIntitule(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Connaitre"
+                  value={newScenarioConnaitre}
+                  onChange={(e) => setNewScenarioConnaitre(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Rentrer"
+                  value={newScenarioRentrer}
+                  onChange={(e) => setNewScenarioRentrer(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Trouver"
+                  value={newScenarioTrouver}
+                  onChange={(e) => setNewScenarioTrouver(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Exploiter"
+                  value={newScenarioExploiter}
+                  onChange={(e) => setNewScenarioExploiter(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <input
+                  type="number"
+                  placeholder="Vraisemblance"
+                  value={newScenarioVraisemblence}
+                  onChange={(e) =>
+                    setNewScenarioVraisemblence(Number(e.target.value))
+                  }
+                  min={1}
+                  max={4}
+                  className="atelier4-page__modal-input"
+                />
+                <div className="atelier4-page__modal-actions">
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={handleCreateScenario}
+                  >
+                    Create
+                  </button>
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={() => setAddScenarioModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
-        </ul>
-        {/* Buttons for updating or deleting */}
-        <div
-        className="content"
-        style={{
-          flex: 1,
-          padding: "20px",
-          boxSizing: "border-box",
-          overflowY: "auto",
-        }}
-      >
-
-        {selectedScenarioStrat  && (
-          <div>
-            <h3>Scenario strategique {selectedScenarioStrat.Intitul}</h3>
-            <h4>Scenario opperationnels</h4>
-            {scenarioOpp.map((scenario) => (
-              <div 
-              key={scenario.id}
-              onClick={() => handleSelectedScenario(scenario)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedScenario &&
-                    selectedScenario.id === scenario.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-              >{scenario.Intitul}</div>
-            ))}
-
-            <button onClick={() => handleViewScenario()}>
-              View Scenario
-            </button>
-            <button onClick={handleAddScenarioClick}>
-              Add Scenario
-            </button>
-            <button onClick={handleUpdateScenarioClick}>
-              Update Scenario
-            </button>
-            <button onClick={handleDeleteScenarioClick}>
-              Delete Scenario
-            </button>
-          </div>
-        )}
-      </div>
-      </div>
-
-
-      {/*======================================== Source de risque modals ============================================*/}
-      {isAddScenarioModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Add Scenario</h3>
-            <input
-              type="text"
-              placeholder="Intitule"
-              value={newScenarioIntitule}
-              onChange={(e) => setNewScenarioIntitule(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Connaitre"
-              value={newScenarioConnaitre}
-              onChange={(e) => setNewScenarioConnaitre(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Rentrer"
-              value={newScenarioRentrer}
-              onChange={(e) => setNewScenarioRentrer(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Trouver"
-              value={newScenarioTrouver}
-              onChange={(e) => setNewScenarioTrouver(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Exploiter"
-              value={newScenarioExploiter}
-              onChange={(e) => setNewScenarioExploiter(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <input
-              type="number"
-              placeholder="Vraisemblance"
-              value={newScenarioVraisemblence}
-              onChange={(e) => setNewScenarioVraisemblence(Number(e.target.value))}
-              min={1}
-              max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateScenario}
-                style={{ padding: "10px 20px" }}
-              >
-                Create
-              </button>
-              <button
-                onClick={handleCloseModal}
-                style={{ padding: "10px 20px" }}
-              >
-                Cancel
-              </button>
+    
+          {/* Update Scenario Modal */}
+          {isUpdateScenarioModalOpen && (
+            <div className="atelier4-page__modal-overlay">
+              <div className="atelier4-page__modal-content">
+                <h3>Update Scenario</h3>
+                <input
+                  type="text"
+                  placeholder="Intitulé"
+                  value={newScenarioIntitule}
+                  onChange={(e) => setNewScenarioIntitule(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Connaitre"
+                  value={newScenarioConnaitre}
+                  onChange={(e) => setNewScenarioConnaitre(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Rentrer"
+                  value={newScenarioRentrer}
+                  onChange={(e) => setNewScenarioRentrer(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Trouver"
+                  value={newScenarioTrouver}
+                  onChange={(e) => setNewScenarioTrouver(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <textarea
+                  placeholder="Exploiter"
+                  value={newScenarioExploiter}
+                  onChange={(e) => setNewScenarioExploiter(e.target.value)}
+                  className="atelier4-page__modal-input"
+                />
+                <input
+                  type="number"
+                  placeholder="Vraisemblance"
+                  value={newScenarioVraisemblence}
+                  onChange={(e) =>
+                    setNewScenarioVraisemblence(Number(e.target.value))
+                  }
+                  min={1}
+                  max={4}
+                  className="atelier4-page__modal-input"
+                />
+                <div className="atelier4-page__modal-actions">
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={handleUpdateScenario}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={() => setUpdateScenarioModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Update source Modal */}
-      {isUpdateScenarioModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Update Scenario</h3>
-            <input
-              type="text"
-              placeholder="Intitule"
-              value={newScenarioIntitule}
-              onChange={(e) => setNewScenarioIntitule(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Connaitre"
-              value={newScenarioConnaitre}
-              onChange={(e) => setNewScenarioConnaitre(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Rentrer"
-              value={newScenarioRentrer}
-              onChange={(e) => setNewScenarioRentrer(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Trouver"
-              value={newScenarioTrouver}
-              onChange={(e) => setNewScenarioTrouver(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <textarea
-              placeholder="Exploiter"
-              value={newScenarioExploiter}
-              onChange={(e) => setNewScenarioExploiter(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <input
-              type="number"
-              placeholder="Vraisemblance"
-              value={newScenarioVraisemblence}
-              onChange={(e) => setNewScenarioVraisemblence(Number(e.target.value))}
-              min={1}
-              max={4}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateScenario}
-                style={{ padding: "10px 20px" }}
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setUpdateScenarioModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
-                Cancel
-              </button>
+          )}
+    
+          {/* View Scenario Modal */}
+          {showViewScenarioModal && selectedScenario && (
+            <div className="atelier4-page__modal-overlay">
+              <div className="atelier4-page__modal-content">
+                <h3>Scenario Details</h3>
+                <p>
+                  <strong>Intitul:</strong> {selectedScenario.Intitul}
+                </p>
+                <p>
+                  <strong>Connaitre:</strong> {selectedScenario.Connaitre}
+                </p>
+                <p>
+                  <strong>Rentrer:</strong> {selectedScenario.Rentrer}
+                </p>
+                <p>
+                  <strong>Trouver:</strong> {selectedScenario.Trouver}
+                </p>
+                <p>
+                  <strong>Exploiter:</strong> {selectedScenario.Exploiter}
+                </p>
+                <p>
+                  <strong>Vraisemblence:</strong> {selectedScenario.Vraisemblence}
+                </p>
+                <div className="atelier4-page__modal-actions">
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={handleCloseViewScenarioModal}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeleteConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Are you sure you want to delete this source de risque?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteScenario}
-                style={{ padding: "10px 20px" }}
-              >
-                Yes
-              </button>
-              <button
-                onClick={handleCloseDeleteConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
-                No
-              </button>
+          )}
+    
+          {/* Delete Scenario Modal */}
+          {isDeleteConfirmationOpen && (
+            <div className="atelier4-page__modal-overlay">
+              <div className="atelier4-page__modal-content">
+                <h3>Delete Scenario</h3>
+                <p>Are you sure you want to delete this scenario?</p>
+                <div className="atelier4-page__modal-actions">
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={handleDeleteScenario}
+                  >
+                    Yes, Delete
+                  </button>
+                  <button
+                    className="atelier4-page__modal-btn"
+                    onClick={() => setDeleteConfirmationOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
-
-      {showViewScenarioModal && selectedScenario && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
-            <h3>Scenario Details</h3>
-            <p>
-              <strong>Intitul:</strong> {selectedScenario.Intitul}
-            </p>
-            <p>
-              <strong>Connaitre:</strong> {selectedScenario.Connaitre}
-            </p>
-            <p>
-              <strong>Rentrer:</strong> {selectedScenario.Rentrer}
-            </p>
-            <p>
-              <strong>Trouver:</strong> {selectedScenario.Trouver}
-            </p>
-            <p>
-              <strong>Exploiter:</strong> {selectedScenario.Exploiter}
-            </p>
-            <p>
-              <strong>Vraisemblence:</strong> {selectedScenario.Vraisemblence}
-            </p>
-            <button
-              onClick={handleCloseViewScenarioModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              Back
-            </button>
-          </div>
-        </div>
-      )}
-
-    </div>
-    );
+      );
 };
 
 export default Atelier4;

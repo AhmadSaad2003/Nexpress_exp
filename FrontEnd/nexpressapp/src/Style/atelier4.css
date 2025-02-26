@@ -1,0 +1,161 @@
+/* Atelier4Page.css */
+
+.atelier4-page {
+    display: block;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    padding: 30px;
+    box-sizing: border-box;
+    
+  }
+  
+
+  
+  /* Main Content Area */
+  .atelier4-page__content {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    margin-bottom: 20px;
+    color: #fff;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+  }
+  
+  /* Sections (cards) */
+  .atelier4-page__section {
+    margin-bottom: 20px;
+  }
+  
+  .atelier4-page__section h3 {
+    color: #667eea;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  
+  /* List styling */
+  .atelier4-page__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+  }
+  
+  .atelier4-page__list-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .atelier4-page__list-item:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+  }
+  
+  .atelier4-page__list-item--selected {
+    background-color: #e0f7fa;
+  }
+  
+  /* Button Group */
+  .atelier4-page__btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  /* Buttons */
+  .atelier4-page__btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .atelier4-page__btn--primary {
+    background-color: #667eea;
+    color: #fff;
+  }
+  
+  .atelier4-page__btn--primary:hover {
+    background-color: #1976d2;
+    transform: scale(1.02);
+  }
+
+  .atelier4-page__btn--add{
+    background-color: #2196f3;
+    color: #fff;
+  }
+
+  .atelier4-page__btn--add:hover {
+    background-color: #1976d2;
+    transform: scale(1.02);
+  }
+  
+  .atelier4-page__btn--secondary {
+    background-color: #ffc107;
+    color: #fff;
+  }
+  
+  .atelier4-page__btn--secondary:hover {
+    background-color: #ffb300;
+    transform: scale(1.02);
+  }
+  
+  .atelier4-page__btn--danger {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  .atelier4-page__btn--danger:hover {
+    background-color: #d32f2f;
+    transform: scale(1.02);
+  }
+  
+  /* Modal Styles */
+  .atelier4-page__modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  
+  .atelier4-page__modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .atelier4-page__modal-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  .atelier4-page__modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  

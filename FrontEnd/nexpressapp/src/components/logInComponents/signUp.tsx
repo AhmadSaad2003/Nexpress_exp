@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { signUp } from "../../services/logInServices/signUpService";
+import "../../Style/SignUp.css";
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -18,20 +19,22 @@ const SignUp: React.FC = () => {
       return;
     }
     try {
-      const response = await signUp(email, userName, password);
+      await signUp(email, userName, password);
       setSuccess("Sign up successful!");
     } catch (err) {
-      setError("err.message");
+      setError("Sign up failed. Please try again.");
     }
   };
 
   return (
-    <div className="sign-up">
+    <div className="auth-signup">
       <h2>Sign Up</h2>
+      {error && <p className="auth-error">{error}</p>}
+      {success && <p className="auth-success">{success}</p>}
       <form onSubmit={handleSignUp}>
         <input
           type="text"
-          placeholder="userName"
+          placeholder="Username"
           value={userName}
           onChange={(e) => setUserName(e.target.value)}
           required

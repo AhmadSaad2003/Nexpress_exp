@@ -6,6 +6,7 @@ import { BienSupport } from "../../interfaces/biensupport";
 import { EvenementRedoute } from "../../interfaces/evenementRedoute";
 import { SocleDeSecurite } from "../../interfaces/socleDeSecurite";
 import { Ecart } from "../../interfaces/ecart";
+import "../../Style/atelier1.css"
 //mission
 import { getappmissions } from "../../services/Atelier1Services/getAppMissionsService";
 import { createmission } from "../../services/Atelier1Services/createMissionService";
@@ -314,6 +315,7 @@ const Atelier1: React.FC = () => {
           alert("Mission deleted successfully!");
           fetchData(app.id);
           setDeleteConfirmationOpen(false);
+          setSelectedMission(null);
         } else {
           alert("Failed to delete mission. Please try again.");
         }
@@ -399,6 +401,7 @@ const Atelier1: React.FC = () => {
           if (selectedMission) handleSelectMission(selectedMission);
           alert("Valeur Metier deleted successfully!");
           setDeleteValeurConfirmationOpen(false);
+          setSelectedValeurMetier(null);
         } else {
           alert("Failed to delete valeur metier. Please try again.");
         }
@@ -541,6 +544,7 @@ const Atelier1: React.FC = () => {
           alert("Socle de securite deleted successfully!");
           fetchData(app.id);
           setDeleteSocleConfirmationOpen(false);
+          setSelectedSocleDeSecurite(null);
         } else {
           alert("Failed to delete Socle de securite. Please try again.");
         }
@@ -621,6 +625,7 @@ const Atelier1: React.FC = () => {
           if (selectedSocleDeSecurite) handleSelectSocleDeSecurite(selectedSocleDeSecurite);
           alert("Ecart deleted successfully!");
           setDeleteEcartConfirmationOpen(false);
+          setSelectedEcart(null);
         } else {
           alert("Failed to delete Ecart. Please try again.");
         }
@@ -756,6 +761,7 @@ const Atelier1: React.FC = () => {
           alert("Bien support deleted successfully!");
           if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
           setDeleteBienConfirmationOpen(false);
+          setselectedBien(null);
         } else {
           alert("Failed to delete Bien support. Please try again.");
         }
@@ -841,6 +847,7 @@ const Atelier1: React.FC = () => {
           if (selectedValeurMetier) handleSelectValeurMetier(selectedValeurMetier);
           alert("Evenement redoute deleted successfully!");
           setDeleteEventConfirmationOpen(false);
+          setselectedEvent(null);
         } else {
           alert("Failed to delete Evenement redoute. Please try again.");
         }
@@ -907,348 +914,241 @@ const Atelier1: React.FC = () => {
 
   //==========================================================================================================
   return (
-    <div className="atelier1-page" style={{ display: "flex", height: "100vh" }}>
-      <div
-        className="menu"
-        style={{
-          width: "20%",
-          borderRight: "1px solid #ccc",
-          padding: "10px",
-          boxSizing: "border-box",
-        }}
-      >
-        <h3>{app.name}</h3>
-        <p>
-          <strong>Created On:</strong>{" "}
-          {new Date(app.dateofcreation).toLocaleDateString()}
-        </p>
-
-        <h4>Missions</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+    <div className="atelier1-page">
+      {/* Left Sidebar */}
+      <div className="atelier1-page__sidebar">
+        <h4 className="atelier1-page__sidebar-title">Missions</h4>
+        <ul className="atelier1-page__mission-list">
           {missions.length > 0 ? (
             missions.map((mission) => (
               <li
                 key={mission.id}
+                className={`atelier1-page__mission-item ${
+                  selectedMission && selectedMission.id === mission.id
+                    ? "atelier1-page__mission-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectMission(mission)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedMission && selectedMission.id === mission.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
               >
                 {mission.description || `Mission ${mission.id}`}
               </li>
             ))
           ) : (
-            <p>No missions available.</p>
+            <p className="atelier1-page__empty-message">No missions available.</p>
           )}
         </ul>
-        {/* Buttons for updating or deleting */}
-        <div>
+        <div className="atelier1-page__mission-actions">
           <button
+            className="atelier1-page__btn atelier1-page__btn--add"
             onClick={handleAddMissionClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#2196f3",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Add Mission
           </button>
           <button
+            className="atelier1-page__btn atelier1-page__btn--update"
             onClick={handleUpdateMissionClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#ffc107",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Update
           </button>
           <button
+            className="atelier1-page__btn atelier1-page__btn--delete"
             onClick={handleDeleteMissionClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#f44336",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Delete
           </button>
         </div>
 
-        <h4>Socle de securite</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <h4 className="atelier1-page__sidebar-title">Socle de securite</h4>
+        <ul className="atelier1-page__socle-list">
           {soclesDeSecurite.length > 0 ? (
             soclesDeSecurite.map((socle) => (
               <li
                 key={socle.id}
+                className={`atelier1-page__socle-item ${
+                  selectedSocleDeSecurite && selectedSocleDeSecurite.id === socle.id
+                    ? "atelier1-page__socle-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectSocleDeSecurite(socle)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedSocleDeSecurite &&
-                    selectedSocleDeSecurite.id === socle.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
               >
                 {socle.Name || `Socle ${socle.id}`}
               </li>
             ))
           ) : (
-            <p>No Socle de securiter available.</p>
+            <p className="atelier1-page__empty-message">
+              No Socle de securite available.
+            </p>
           )}
         </ul>
-        {/* Buttons for updating or deleting */}
-        <div>
+        <div className="atelier1-page__socle-actions">
           <button
+            className="atelier1-page__btn atelier1-page__btn--add"
             onClick={handleAddSocleClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#2196f3",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Add Socle de securite
           </button>
           <button
+            className="atelier1-page__btn atelier1-page__btn--update"
             onClick={handleUpdateSocleClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#ffc107",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Update Socle de securite
           </button>
           <button
+            className="atelier1-page__btn atelier1-page__btn--delete"
             onClick={handleDeleteSocleClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#f44336",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
           >
             Delete Socle de securite
           </button>
         </div>
       </div>
 
-      <div
-        className="content"
-        style={{
-          flex: 1,
-          padding: "20px",
-          boxSizing: "border-box",
-          overflowY: "auto",
-        }}
-      >
+      {/* Right Content Area */}
+      <div className="atelier1-page__content">
         {selectedMission && !selectedSocleDeSecurite && (
-          <div>
-            <h3>Mission: {selectedMission.description}</h3>
-
-            <h3>Valeur Metiers</h3>
+          <div className="atelier1-page__mission-content">
+            <h3>Valeur Metier for: {selectedMission.description}</h3>
             {valeursMetier.map((valeur) => (
               <div
                 key={valeur.id}
+                className={`atelier1-page__valeur-item ${
+                  selectedValeurMetier && selectedValeurMetier.id === valeur.id
+                    ? "atelier1-page__valeur-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectValeurMetier(valeur)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedValeurMetier &&
-                    selectedValeurMetier.id === valeur.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
               >
                 <p>{valeur.Nom}</p>
               </div>
             ))}
-
-            <button onClick={() => handleViewValeurMetier()}>
-              View Valeur Metier
-            </button>
-            <button onClick={handleOpenAddValeurMetierModal}>
-              Add Valeur Metier
-            </button>
-            <button onClick={handleOpenUpdateValeurMetierModal}>
-              Update Valeur Metier
-            </button>
-            <button onClick={handleOpenDeleteValeurMetierModal}>
-              Delete Valeur Metier
-            </button>
+            <div className="atelier1-page__valeur-actions">
+              <button className="atelier1-page__btn" onClick={handleViewValeurMetier}>
+                View Valeur Metier
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenAddValeurMetierModal}>
+                Add Valeur Metier
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenUpdateValeurMetierModal}>
+                Update Valeur Metier
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenDeleteValeurMetierModal}>
+                Delete Valeur Metier
+              </button>
+            </div>
           </div>
         )}
 
         {selectedSocleDeSecurite && !selectedMission && (
-          <div>
+          <div className="atelier1-page__socle-content">
             <h3>Socles De Securite: {selectedSocleDeSecurite.Name}</h3>
             <h4>Ecarts</h4>
             {ecarts.map((ecart) => (
-              <div 
-              key={ecart.id}
-              onClick={() => handleSelectedEcart(ecart)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedEcart &&
-                    selectedEcart.id === ecart.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-              >{ecart.TypeEcart}</div>
+              <div
+                key={ecart.id}
+                className={`atelier1-page__ecart-item ${
+                  selectedEcart && selectedEcart.id === ecart.id
+                    ? "atelier1-page__ecart-item--selected"
+                    : ""
+                }`}
+                onClick={() => handleSelectedEcart(ecart)}
+              >
+                {ecart.TypeEcart}
+              </div>
             ))}
-
-            <button onClick={() => handleViewEcart()}>
-              View Ecart
-            </button>
-            <button onClick={handleOpenAddEcartModal}>
-              Add Ecart
-            </button>
-            <button onClick={handleOpenUpdateEcartModal}>
-              Update Ecart
-            </button>
-            <button onClick={handleOpenDeleteEcartModal}>
-              Delete Ecart
-            </button>
+            <div className="atelier1-page__ecart-actions">
+              <button className="atelier1-page__btn" onClick={handleViewEcart}>
+                View Ecart
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenAddEcartModal}>
+                Add Ecart
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenUpdateEcartModal}>
+                Update Ecart
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenDeleteEcartModal}>
+                Delete Ecart
+              </button>
+            </div>
           </div>
         )}
 
         {selectedValeurMetier && showBienEvent && (
-          <div>
-            <h3>Bien Supports and Evenements Redoutes for Valeur Metier</h3>
+          <div className="atelier1-page__valeur-detail">
+            <h3>Bien Supports and Evenements Redoutes for: {selectedValeurMetier.Nom}</h3>
             <h4>Bien Supports</h4>
             {bienSupports.map((bien) => (
-                <div 
+              <div
                 key={bien.id}
+                className={`atelier1-page__bien-item ${
+                  selectedBien && selectedBien.id === bien.id
+                    ? "atelier1-page__bien-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectedBien(bien)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedBien &&
-                    selectedBien.id === bien.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-                >{bien.Name}</div>
-              ))}
-            <button onClick={handleAddBienClick}>
-              Add Bien support
-            </button>
-            <button onClick={handleUpdateBienClick}>
-              Update Bien support
-            </button>
-            <button onClick={handleDeleteBienClick}>
-              Delete Bien support
-            </button>
+              >
+                {bien.Name}
+              </div>
+            ))}
+            <div className="atelier1-page__bien-actions">
+              <button className="atelier1-page__btn" onClick={handleAddBienClick}>
+                Add Bien support
+              </button>
+              <button className="atelier1-page__btn" onClick={handleUpdateBienClick}>
+                Update Bien support
+              </button>
+              <button className="atelier1-page__btn" onClick={handleDeleteBienClick}>
+                Delete Bien support
+              </button>
+            </div>
             <h4>Evenements Redoutes</h4>
             {evenementsRedoutes.map((event) => (
-                <div 
+              <div
                 key={event.id}
+                className={`atelier1-page__event-item ${
+                  selectedEvent && selectedEvent.id === event.id
+                    ? "atelier1-page__event-item--selected"
+                    : ""
+                }`}
                 onClick={() => handleSelectedEvent(event)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedEvent &&
-                    selectedEvent.id === event.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
-                >{event.Name}</div>
-              ))}
-            <button onClick={() => handleViewEvent()}>
-              View Evenement redoute
-            </button>
-            <button onClick={handleOpenAddEventModal}>
-              Add Evenement redoute
-            </button>
-            <button onClick={handleOpenUpdateEventModal}>
-              Update Evenement redoute
-            </button>
-            <button onClick={handleOpenDeleteEventModal}>
-              Delete Evenement redoute
-            </button>
+              >
+                {event.Name}
+              </div>
+            ))}
+            <div className="atelier1-page__event-actions">
+              <button className="atelier1-page__btn" onClick={handleViewEvent}>
+                View Evenement redoute
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenAddEventModal}>
+                Add Evenement redoute
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenUpdateEventModal}>
+                Update Evenement redoute
+              </button>
+              <button className="atelier1-page__btn" onClick={handleOpenDeleteEventModal}>
+                Delete Evenement redoute
+              </button>
+            </div>
           </div>
         )}
       </div>
 
-      {/*======================================== mission modals ============================================*/}
+      {/* ---------------------- Modals ---------------------- */}
+      {/*===========================================mission modals================================================*/}
       {isAddMissionModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Add Mission</h3>
             <input
               type="text"
               placeholder="Mission description"
               value={newMissionDescription}
               onChange={(e) => setNewMissionDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateMission}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleCreateMission}>
                 Create
               </button>
-              <button
-                onClick={handleCloseModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseModal}>
                 Cancel
               </button>
             </div>
@@ -1256,55 +1156,21 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* Update Mission Modal */}
       {isUpdateMissionModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Update Mission</h3>
             <input
               type="text"
               value={updatedMissionDescription}
               onChange={(e) => setUpdatedMissionDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateMission}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleUpdateMission}>
                 Save
               </button>
-              <button
-                onClick={() => setUpdateMissionModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={() => setUpdateMissionModalOpen(false)}>
                 Cancel
               </button>
             </div>
@@ -1312,103 +1178,38 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Are you sure you want to delete this mission?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteMission}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleDeleteMission}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseDeleteConfirmation}>
                 No
               </button>
             </div>
           </div>
         </div>
       )}
+      {/*===========================================valeu metier modals================================================*/}
 
-      {/*======================================== valeur metier modals ============================================*/}
       {isAddValeurMetierModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Add Valeur Metier</h3>
             <input
               type="text"
               placeholder="Name"
               value={newValeurMetierName}
               onChange={(e) => setNewValeurMetierName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <select
               value={newValeurMetierNature}
-              onChange={(e) =>
-                setNewValeurMetierNature(
-                  e.target.value as "Processus" | "Information"
-                )
-              }
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              onChange={(e) => setNewValeurMetierNature(e.target.value as "Processus" | "Information")}
+              className="atelier1-page__modal-input"
             >
               <option value="Processus">Processus</option>
               <option value="Information">Information</option>
@@ -1417,36 +1218,20 @@ const Atelier1: React.FC = () => {
               placeholder="Description"
               value={newValeurMetierDescription}
               onChange={(e) => setNewValeurMetierDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <input
               type="text"
               placeholder="Entite Responsable"
               value={newEntiteResponsable}
               onChange={(e) => setNewEntiteResponsable(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateValeurMetier}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleCreateValeurMetier}>
                 Save
               </button>
-              <button
-                onClick={handleCloseAddValeurMetierModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseAddValeurMetierModal}>
                 Cancel
               </button>
             </div>
@@ -1454,31 +1239,10 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* View Modal */}
       {showViewValeurModal && selectedValeurMetier && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
-            <h3>Valeur metier Details</h3>
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
+            <h3>Valeur Metier Details</h3>
             <p>
               <strong>Name:</strong> {selectedValeurMetier.Nom}
             </p>
@@ -1489,64 +1253,24 @@ const Atelier1: React.FC = () => {
               <strong>Description:</strong> {selectedValeurMetier.Description}
             </p>
             <p>
-              <strong>Entite Responsable</strong>{" "}
-              {selectedValeurMetier.EntiteResponsable}
+              <strong>Entite Responsable:</strong> {selectedValeurMetier.EntiteResponsable}
             </p>
-            <button
-              onClick={handleCloseViewValeurModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="atelier1-page__modal-btn" onClick={handleCloseViewValeurModal}>
               Back
             </button>
           </div>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteValeurConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Are you sure you want to delete this Valeur Metier?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteValeur}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleDeleteValeur}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteValeurConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseDeleteValeurConfirmation}>
                 No
               </button>
             </div>
@@ -1555,55 +1279,19 @@ const Atelier1: React.FC = () => {
       )}
 
       {isUpdateValeurModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Update Valeur Metier</h3>
             <input
               type="text"
               value={newValeurMetierName}
               onChange={(e) => setNewValeurMetierName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <select
               value={newValeurMetierNature}
-              onChange={(e) =>
-                setNewValeurMetierNature(
-                  e.target.value as "Processus" | "Information"
-                )
-              }
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              onChange={(e) => setNewValeurMetierNature(e.target.value as "Processus" | "Information")}
+              className="atelier1-page__modal-input"
             >
               <option value="Processus">Processus</option>
               <option value="Information">Information</option>
@@ -1611,92 +1299,43 @@ const Atelier1: React.FC = () => {
             <textarea
               value={newValeurMetierDescription}
               onChange={(e) => setNewValeurMetierDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <input
               type="text"
               value={newEntiteResponsable}
               onChange={(e) => setNewEntiteResponsable(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateValeur}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleUpdateValeur}>
                 Save
               </button>
-              <button
-                onClick={handleCloseUpdateValeurMetierModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseUpdateValeurMetierModal}>
                 Cancel
               </button>
             </div>
           </div>
         </div>
       )}
+      {/*===========================================socle de securite modals================================================*/}
 
-      {/*======================================== socle de securite modals ============================================*/}
       {isAddSocleModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Add Socle de securite</h3>
             <input
               type="text"
-              placeholder="Socle de securiter name"
+              placeholder="Socle de securite name"
               value={newSocleName}
               onChange={(e) => setnewSocleName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateSocle}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleCreateSocle}>
                 Create
               </button>
-              <button
-                onClick={handleCloseAddSocleModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseAddSocleModal}>
                 Cancel
               </button>
             </div>
@@ -1704,55 +1343,21 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* Update socle de securite  Modal */}
       {isUpdateSocleModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Update Socle de securite</h3>
             <input
               type="text"
               value={newSocleName}
               onChange={(e) => setnewSocleName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateSocle}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleUpdateSocle}>
                 Save
               </button>
-              <button
-                onClick={() => setUpdateSocleModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={() => setUpdateSocleModalOpen(false)}>
                 Cancel
               </button>
             </div>
@@ -1760,112 +1365,45 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* Delete socle de securite  Modal */}
       {isDeleteSocleConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Are you sure you want to delete this socle de securite?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteSocle}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleDeleteSocle}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteSocleConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseDeleteSocleConfirmation}>
                 No
               </button>
             </div>
           </div>
         </div>
       )}
+      {/*===========================================ecart modals================================================*/}
 
-      {/*======================================== ecarts modals ============================================*/}
       {isAddEcartModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Add Ecart</h3>
             <input
               type="text"
               placeholder="Type"
               value={newEcartType}
               onChange={(e) => setNewEcartType(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <textarea
               placeholder="Justification"
               value={newEcartJustification}
               onChange={(e) => setNewEcartJustification(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateEcart}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleCreateEcart}>
                 Save
               </button>
-              <button
-                onClick={handleCloseAddEcartModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseAddEcartModal}>
                 Cancel
               </button>
             </div>
@@ -1873,30 +1411,9 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* View Modal */}
       {showViewEcartModal && selectedEcart && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Ecart Details</h3>
             <p>
               <strong>Name:</strong> {selectedEcart.TypeEcart}
@@ -1904,61 +1421,22 @@ const Atelier1: React.FC = () => {
             <p>
               <strong>Nature:</strong> {selectedEcart.Justification}
             </p>
-            <button
-              onClick={handleCloseViewEcartModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="atelier1-page__modal-btn" onClick={handleCloseViewEcartModal}>
               Back
             </button>
           </div>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteEcartConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Are you sure you want to delete this Ecart?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteEcart}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleDeleteEcart}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteEcartConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseDeleteEcartConfirmation}>
                 No
               </button>
             </div>
@@ -1967,121 +1445,49 @@ const Atelier1: React.FC = () => {
       )}
 
       {isUpdateEcartModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Update Ecart</h3>
             <input
               type="text"
               value={newEcartType}
               onChange={(e) => setNewEcartType(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <textarea
               value={newEcartJustification}
               onChange={(e) => setNewEcartJustification(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateEcart}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleUpdateEcart}>
                 Save
               </button>
-              <button
-                onClick={handleCloseUpdateEcartModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseUpdateEcartModal}>
                 Cancel
               </button>
             </div>
           </div>
         </div>
       )}
-
-      {/*======================================== bien modals ============================================*/}
+      {/*===========================================bien support modals================================================*/}
 
       {isAddBienModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Add Bien support</h3>
             <input
               type="text"
               placeholder="Bien support name"
               value={newBienName}
               onChange={(e) => setNewBienName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateBien}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleCreateBien}>
                 Create
               </button>
-              <button
-                onClick={handleCloseAddBienModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseAddBienModal}>
                 Cancel
               </button>
             </div>
@@ -2089,55 +1495,21 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* Update socle de securite  Modal */}
       {isUpdateBienModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Update Bien support</h3>
             <input
               type="text"
               value={newBienName}
               onChange={(e) => setNewBienName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateBien}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleUpdateBien}>
                 Save
               </button>
-              <button
-                onClick={() => setUpdateBienModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={() => setUpdateBienModalOpen(false)}>
                 Cancel
               </button>
             </div>
@@ -2145,136 +1517,59 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* Delete socle de securite  Modal */}
       {isDeleteBienConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Are you sure you want to delete this bien  support?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteBien}
-                style={{ padding: "10px 20px" }}
-              >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
+            <h3>Are you sure you want to delete this bien support?</h3>
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleDeleteBien}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteBienConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseDeleteBienConfirmation}>
                 No
               </button>
             </div>
           </div>
         </div>
       )}
+      {/*===========================================evenement redoute modals================================================*/}
 
-      {/*======================================== evenement redoute modals ============================================*/}
       {isAddEventModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Add Evenement redoute</h3>
             <input
               type="text"
               placeholder="Name"
               value={newEventName}
               onChange={(e) => setNewEventName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <textarea
               placeholder="Description"
               value={newEventDescription}
               onChange={(e) => setNewEventDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <input
               type="text"
               placeholder="Type"
               value={newEventType}
               onChange={(e) => setNewEventType(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <input
               type="text"
               placeholder="Consequence"
               value={newEventConsequence}
               onChange={(e) => setNewEventConsequence(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateEvent}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleCreateEvent}>
                 Save
               </button>
-              <button
-                onClick={handleCloseAddEventModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseAddEventModal}>
                 Cancel
               </button>
             </div>
@@ -2282,31 +1577,10 @@ const Atelier1: React.FC = () => {
         </div>
       )}
 
-      {/* View Modal */}
       {showViewEventModal && selectedEvent && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              textAlign: "center",
-            }}
-          >
-            <h3>Valeur metier Details</h3>
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
+            <h3>Evenement redoute Details</h3>
             <p>
               <strong>Name:</strong> {selectedEvent.Name}
             </p>
@@ -2317,64 +1591,24 @@ const Atelier1: React.FC = () => {
               <strong>Type:</strong> {selectedEvent.TypeEvent}
             </p>
             <p>
-              <strong>Consequence</strong>{" "}
-              {selectedEvent.Consequence}
+              <strong>Consequence:</strong> {selectedEvent.Consequence}
             </p>
-            <button
-              onClick={handleCloseViewEventModal}
-              style={{
-                marginTop: "20px",
-                padding: "10px",
-                backgroundColor: "#2196f3",
-                color: "white",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
+            <button className="atelier1-page__modal-btn" onClick={handleCloseViewEventModal}>
               Back
             </button>
           </div>
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {isDeleteEventConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Are you sure you want to delete this Evenement redoute?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteEvent}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleDeleteEvent}>
                 Yes
               </button>
-              <button
-                onClick={handleCloseDeleteEventConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseDeleteEventConfirmation}>
                 No
               </button>
             </div>
@@ -2383,92 +1617,43 @@ const Atelier1: React.FC = () => {
       )}
 
       {isUpdateEventModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
+        <div className="atelier1-page__modal-overlay">
+          <div className="atelier1-page__modal-content">
             <h3>Update Evenement redoute</h3>
             <input
               type="text"
               value={newEventName}
               onChange={(e) => setNewEventName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <textarea
               value={newEventDescription}
               onChange={(e) => setNewEventDescription(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <input
               type="text"
               value={newEventType}
               onChange={(e) => setNewEventType(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
             <input
               type="text"
               value={newEventConsequence}
               onChange={(e) => setNewEventConsequence(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
+              className="atelier1-page__modal-input"
             />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateEvent}
-                style={{ padding: "10px 20px" }}
-              >
+            <div className="atelier1-page__modal-actions">
+              <button className="atelier1-page__modal-btn" onClick={handleUpdateEvent}>
                 Save
               </button>
-              <button
-                onClick={handleCloseUpdateEventModal}
-                style={{ padding: "10px 20px" }}
-              >
+              <button className="atelier1-page__modal-btn" onClick={handleCloseUpdateEventModal}>
                 Cancel
               </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };

@@ -1,0 +1,218 @@
+/* Atelier1Page.css */
+
+.atelier3-page {
+    display: flex;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fa;
+  }
+  
+  /* Sidebar styling similar to Dashboard */
+  .atelier3-page__sidebar {
+    width: 400px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    border-radius: 10px;
+  }
+  
+  .atelier3-page__sidebar-title {
+    font-size: 1.6rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Mission & Socle Lists */
+  .atelier3-page__ecosysteme-list,
+  .atelier3-page__source-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px;
+  }
+  
+  .atelier3-page__ecosysteme-item,
+  .atelier3-page__source-item {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .atelier3-page__ecosysteme-item:hover,
+  .atelier3-page__source-item:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateX(5px);
+  }
+  
+  .atelier3-page__ecosysteme-item--selected,
+  .atelier3-page__source-item--selected {
+    background-color: #e0f7fa;
+  }
+  
+  /* Action Button Groups */
+  .atelier3-page__ecosysteme-actions,
+  .atelier3-page__source-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 20px;
+  }
+  
+  .atelier3-page__btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: background-color 0.3s ease;
+    background-color: #2196f3;
+    color: #fff;
+  }
+  
+  /* Button Variations */
+  .atelier3-page__btn--add {
+    background-color: #2196f3;
+    color: #fff;
+  }
+  
+  .atelier3-page__btn--add:hover {
+    background-color: #1976d2;
+  }
+  
+  .atelier3-page__btn--update {
+    background-color: #ffc107;
+    color: #fff;
+  }
+  
+  .atelier3-page__btn--update:hover {
+    background-color: #ffb300;
+  }
+  
+  .atelier3-page__btn--delete {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  .atelier3-page__btn--delete:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Right Content Area */
+  .atelier3-page__content {
+    flex: 1;
+    background: #fff;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    padding-top: 0px;
+  }
+  
+  /* Content Sections */
+  .atelier3-page__ecosysteme-content,
+  .atelier3-page__source-content,
+  .atelier3-page__strat-detail {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  /* Items for Valeur, Bien, Event, Ecart */
+  .atelier3-page__partie-item,
+  .atelier3-page__mesure-item,
+  .atelier3-page__strat-item{
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    transition: background-color 0.3s ease;
+    color: #333;
+  }
+  
+  .atelier3-page__partie-item:hover,
+  .atelier3-page__mesure-item:hover,
+  .atelier3-page__strat-item:hover {
+    background-color: #e0f7fa;
+  }
+  
+  .atelier3-page__partie-item--selected,
+  .atelier3-page__mesure-item--selected,
+  .atelier3-page__strat-item--selected {
+    background-color: #e0f7fa;
+  }
+  
+  /* Action Groups for partie, mesure, Event, strat */
+  .atelier3-page__partie-actions,
+  .atelier3-page__mesure-actions,
+  .atelier3-page__strat-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+  
+  /* Modal Overlay & Content */
+  .atelier3-page__modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  
+  .atelier3-page__modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    width: 400px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .atelier3-page__modal-input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  .atelier3-page__modal-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .atelier3-page__modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #2196f3;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .atelier3-page__modal-btn:hover {
+    background-color: #1976d2;
+    transform: scale(1.02);
+  }
+  

@@ -1,0 +1,50 @@
+/* SignUp.css */
+.auth-signup {
+    text-align: center;
+  }
+  
+  .auth-signup h2 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+  }
+  
+  .auth-error {
+    color: #e74c3c;
+    margin-bottom: 1rem;
+  }
+  
+  .auth-success {
+    color: #27ae60;
+    margin-bottom: 1rem;
+  }
+  
+  .auth-signup form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .auth-signup form input {
+    padding: 0.75rem;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .auth-signup form button {
+    padding: 0.75rem;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-signup form button:hover {
+    background-color: #2980b9;
+  }
+
+  
+  

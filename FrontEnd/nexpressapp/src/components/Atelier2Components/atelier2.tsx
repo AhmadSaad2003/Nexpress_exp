@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SourceRisque } from "../../interfaces/sourceRisque";
+import "../../Style/atelier2.css";
 
 import {createsource} from "../../services/Atelier2Services/createSourceService";
 import {updatesource} from "../../services/Atelier2Services/updateSourceService";
@@ -142,249 +143,140 @@ const Atelier2: React.FC = () => {
         setDeleteConfirmationOpen(false);
       };
 
-
-    return (
-        <div className="atelier2-page" style={{ display: "flex", height: "100vh" }}>
-      <div
-        className="menu"
-        style={{
-          padding: "10px",
-          boxSizing: "border-box",
-        }}
-      >
-        <h3>{app.name}</h3>
-        <p>
-          <strong>Created On:</strong>{" "}
-          {new Date(app.dateofcreation).toLocaleDateString()}
-        </p>
-
-        <h4>Sources de risques</h4>
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {sourceRisque.length > 0 ? (
-            sourceRisque.map((source) => (
-              <li
-                key={source.id}
-                onClick={() => handleSelectedSource(source)}
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  backgroundColor:
-                    selectedSource && selectedSource.id === source.id
-                      ? "#e0f7fa"
-                      : "#f9f9f9", // Highlight selected app
-                }}
+//-----------------------------------------------------------------------------------------------------------------
+      return (
+        <div className="atelier2-page">
+          {/* Sidebar */}
+          <div className="atelier2-page__sidebar">
+            <h4>Sources de risques</h4>
+            <ul className="atelier2-page__source-list">
+              {sourceRisque.length > 0 ? (
+                sourceRisque.map((source) => (
+                  <li
+                    key={source.id}
+                    className={`atelier2-page__source-item ${
+                      selectedSource && selectedSource.id === source.id
+                        ? "atelier2-page__source-item--selected"
+                        : ""
+                    }`}
+                    onClick={() => handleSelectedSource(source)}
+                  >
+                    {source.Name || `Mission ${source.id}`}
+                  </li>
+                ))
+              ) : (
+                <p className="atelier2-page__empty-message">
+                  No source de risque available.
+                </p>
+              )}
+            </ul>
+            <div className="atelier2-page__source-actions">
+              <button
+                className="atelier2-page__btn atelier2-page__btn--add"
+                onClick={handleAddSourceClick}
               >
-                {source.Name || `Mission ${source.id}`}
-              </li>
-            ))
-          ) : (
-            <p>No source de risque available.</p>
+                Add Source de risque
+              </button>
+              <button
+                className="atelier2-page__btn atelier2-page__btn--update"
+                onClick={handleUpdateSourceClick}
+              >
+                Update source de risque
+              </button>
+              <button
+                className="atelier2-page__btn atelier2-page__btn--delete"
+                onClick={handleDeleteSourceClick}
+              >
+                Delete source de risque
+              </button>
+            </div>
+          </div>
+          {/*--------------------------------------------------- source de risque modals------------------------------------------------------*/}
+          {/* Modal for Adding Source */}
+          {isAddSourceModalOpen && (
+            <div className="atelier2-page__modal-overlay">
+              <div className="atelier2-page__modal-content">
+                <h3>Add Source</h3>
+                <input
+                  type="text"
+                  placeholder="Source name"
+                  value={newSourceName}
+                  onChange={(e) => setNewSourceName(e.target.value)}
+                  className="atelier2-page__modal-input"
+                />
+                <div className="atelier2-page__modal-actions">
+                  <button
+                    className="atelier2-page__modal-btn"
+                    onClick={handleCreateSource}
+                  >
+                    Create
+                  </button>
+                  <button
+                    className="atelier2-page__modal-btn"
+                    onClick={handleCloseModal}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
-        </ul>
-        {/* Buttons for updating or deleting */}
-        <div>
-          <button
-            onClick={handleAddSourceClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#2196f3",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Add Source de risque
-          </button>
-          <button
-            onClick={handleUpdateSourceClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#ffc107",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Update source de risque
-          </button>
-          <button
-            onClick={handleDeleteSourceClick}
-            style={{
-              margin: "5px",
-              padding: "10px",
-              backgroundColor: "#f44336",
-              color: "white",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            Delete source de risque
-          </button>
-        </div>
-      </div>
-
-      {/*======================================== Source de risque modals ============================================*/}
-      {isAddSourceModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Add Source</h3>
-            <input
-              type="text"
-              placeholder="Source name"
-              value={newSourceName}
-              onChange={(e) => setNewSourceName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleCreateSource}
-                style={{ padding: "10px 20px" }}
-              >
-                Create
-              </button>
-              <button
-                onClick={handleCloseModal}
-                style={{ padding: "10px 20px" }}
-              >
-                Cancel
-              </button>
+    
+          {/* Modal for Updating Source */}
+          {isUpdateSourceModalOpen && (
+            <div className="atelier2-page__modal-overlay">
+              <div className="atelier2-page__modal-content">
+                <h3>Update Source</h3>
+                <input
+                  type="text"
+                  value={newSourceName}
+                  onChange={(e) => setNewSourceName(e.target.value)}
+                  className="atelier2-page__modal-input"
+                />
+                <div className="atelier2-page__modal-actions">
+                  <button
+                    className="atelier2-page__modal-btn"
+                    onClick={handleUpdateSource}
+                  >
+                    Save
+                  </button>
+                  <button
+                    className="atelier2-page__modal-btn"
+                    onClick={() => setUpdateSourceModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Update source Modal */}
-      {isUpdateSourceModalOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Update Source</h3>
-            <input
-              type="text"
-              value={newSourceName}
-              onChange={(e) => setNewSourceName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                marginBottom: "10px",
-                boxSizing: "border-box",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleUpdateSource}
-                style={{ padding: "10px 20px" }}
-              >
-                Save
-              </button>
-              <button
-                onClick={() => setUpdateSourceModalOpen(false)}
-                style={{ padding: "10px 20px" }}
-              >
-                Cancel
-              </button>
+          )}
+    
+          {/* Modal for Delete Confirmation */}
+          {isDeleteConfirmationOpen && (
+            <div className="atelier2-page__modal-overlay">
+              <div className="atelier2-page__modal-content">
+                <h3>
+                  Are you sure you want to delete this source de risque?
+                </h3>
+                <div className="atelier2-page__modal-actions">
+                  <button
+                    className="atelier2-page__modal-btn"
+                    onClick={handleDeleteSource}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="atelier2-page__modal-btn"
+                    onClick={handleCloseDeleteConfirmation}
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-      )}
-
-      {/* Delete Confirmation Modal */}
-      {isDeleteConfirmationOpen && (
-        <div
-          className="modal-overlay"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            className="modal-content"
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "5px",
-              width: "400px",
-              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            <h3>Are you sure you want to delete this source de risque?</h3>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button
-                onClick={handleDeleteSource}
-                style={{ padding: "10px 20px" }}
-              >
-                Yes
-              </button>
-              <button
-                onClick={handleCloseDeleteConfirmation}
-                style={{ padding: "10px 20px" }}
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-    </div>
-    );
+      );
 };
 
 export default Atelier2;
